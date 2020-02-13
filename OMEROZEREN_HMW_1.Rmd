@@ -1,0 +1,248 @@
+---
+title: "HMW 1- Data 621"
+author: "OMER OZEREN"
+output:
+  html_document:
+    highlight: tango
+    theme: journal
+    toc: yes
+    toc_depth: 5
+    toc_float: yes
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, comment=NA, message=FALSE, warning=FALSE)
+library(tidyverse)
+library(kableExtra)
+library(corrplot)
+library(caret)
+library(DMwR)
+```
+
+## Introduction
+
+```{r read_data, echo=FALSE}
+# Read in the training data
+training <- read.csv("https://raw.githubusercontent.com/omerozeren/DATA621/master/moneyball-training-data.csv") 
+# Read in the evaluation data
+evaluation <- read.csv("https://raw.githubusercontent.com/omerozeren/DATA621/master/moneyball-evaluation-data.csv")
+```
+```{r Data Frame Structure}
+sumtable = data.frame(Variable = character(),
+                   Min = integer(),
+                   Median = integer(),
+                   Mean = double(),
+                   SD = double(),
+                   Max = integer(),
+                   Num_NaN = integer())
+for (i in 2:17) {
+  sumtable <- rbind(sumtable, data.frame(Variable = colnames(training)[i],
+                                   Min = min(training[,i], na.rm=TRUE),
+                                   Median = median(training[,i], na.rm=TRUE),
+                                   Mean = mean(training[,i], na.rm=TRUE),
+                                   SD = sd(training[,i], na.rm=TRUE),
+                                   Max = max(training[,i], na.rm=TRUE),
+                                   Num_NaN = sum(is.na(training[,i])))
+                 )
+}
+colnames(sumtable) <- c("", "Min", "Median", "Mean", "SD", "Max", "Num of NaN")
+```
+We have been given a dataset with `r nrow(training)` records summarizing a major league baseball team's season.
+All statistics have been adjusted to match the performance of a 162 game season.The objective is to build a linear regression model to predict the number of wins for a team.
+This report covers an attempt to build a model to predict number of wins of a baseball team in a season based on several offensive and deffensive statistics. Resulting model explained about 36% of variability in the target variable and included most of the provided explanatory variables. Some potentially helpful variables were not included in the data set. For instance, number of At Bats can be used to calculate on-base percentage which may correlate strongly with winning percentage. The model can be revised with additional variables or further analysis. 
+
+
+
+## Data chacteristics
+
+The data set describes baseball team statistics for the years 1871 to 2006 inclusive. Each record in the data set represents the performance of the team for the given year adjusted to the current length of the season - 162 games. The data set includes 16 variables and the training set includes 2,276 records.
+
+```{r small_multiples_density, warning=FALSE}
+training %>%
+  gather(variable, value, TARGET_WINS:TEAM_FIELDING_DP) %>%
+  ggplot(., aes(value)) + 
+  geom_density(fill = "indianred4", color="indianred4") + 
+  facet_wrap(~variable, scales ="free", ncol = 4) +
+  labs(x = element_blank(), y = element_blank())
+```
+
+```{r}
+quick_summary <- function(df){
+  df %>%
+    summary() %>%
+    kable() %>%
+    kable_styling()
+}
+quick_summary(training)
+```
+
+Some initial observations:  
+
+* The response variable (`TARGET_WINS`) looks to be normally distributed.  This supports the working theory that there are good teams and bad teams.  There are also a lot of average teams.
+* There are also quite a few variables with missing values.  We may need to deal with these in order to have the largest data set possible for modeling.
+* A couple variables are bimodal (`TEAM_BATTING_HR`, `TEAM_BATTING_SO` `TEAM_PITCHING_HR`).  This may be a challenge as some of them are missing values and that may be a challenge in filling in missing values.
+* Some variables are right skewed (`TEAM_BASERUN_CS`, `TEAM_BASERUN_SB`, etc.).  This might support the good team theory.  It may also introduce non-normally distributed residuals in the model.  We shall see.  
+
+#### Zero Values
+
+There are also variables that have verly low values.  Let's see how big of a problem this is:
+
+```{r}
+training %>% 
+  gather(variable, value) %>%
+  filter(value == 0) %>%
+  group_by(variable) %>%
+  tally() %>%
+  mutate(percent = n / nrow(training) * 100) %>%
+  mutate(percent = paste0(round(percent, ifelse(percent < 10, 1, 0)), "%")) %>%
+  arrange(desc(n)) %>%
+  rename(`Variable With Zeros` = variable,
+         `Number of Records` = n,
+         `Share of Total` = percent) %>%
+  kable() %>%
+  kable_styling()
+```
+
+The report shows that missing values are nearly low.
+
+#### Missing Values (NaN)
+
+During our first look at the data it was noted that there were variables that are missing data.  Here's a look at what variables are missing data and how big of a problem it is:
+
+```{r}
+training %>% 
+  gather(variable, value) %>%
+  filter(is.na(value)) %>%
+  group_by(variable) %>%
+  tally() %>%
+  mutate(percent = n / nrow(training) * 100) %>%
+  mutate(percent = paste0(round(percent, ifelse(percent < 10, 1, 0)), "%")) %>%
+  arrange(desc(n)) %>%
+  rename(`Variable Missing Data` = variable,
+         `Number of Records` = n,
+         `Share of Total` = percent) %>%
+  kable() %>%
+  kable_styling()
+```
+
+The "TEAM_BATTING_HBP"" varriable has "NaN" nearly 92%.  We will exclude this variable from consideration in our model.
+
+### Correlations Matrix
+
+Let's take a look at the correlations.  The following is the correlations from the complete cases only:
+
+```{r correlation plot}
+training %>% 
+  cor(., use = "complete.obs") %>%
+  corrplot(., method = "color", type = "upper", tl.col = "black", diag = FALSE)
+```
+#### Correlations betwen Endogenous Variable and Exogenous Variables
+
+Let's take a look at how the Exogenous are correlated with the response variable(Endogenous):
+
+```{r warning=FALSE}
+training %>%
+  gather(variable, value, -TARGET_WINS) %>%
+  ggplot(., aes(value, TARGET_WINS)) + 
+  geom_point(fill = "indianred4", color="grey") + 
+  geom_smooth(method = "lm", se = FALSE, color = "black") + 
+  facet_wrap(~variable, scales ="free", ncol = 4) +
+  labs(x = element_blank(), y = "Wins")
+```
+## Variable chacteristics
+Each variable is presented below with corresponding basic statistics (minimum, median and maximum values, mean and standard deviation, number of records with missing values), boxplot, density plot with highlighted mean value, and scatterplot against outcome variable (`TARGET_WINS`) with best fit line. This information is used to check general validity of data and adjust as necessary. 
+
+
+#### TEAM_BATTING_H: 
+
+This variable represents number of team base hits:
+
+```{r echo=FALSE, warning=FALSE, message=FALSE, fig.width=10, fig.height=6}
+kable(sumtable[sumtable[,1]=="TEAM_BATTING_H",2:7], row.names=FALSE)
+# Boxplot
+ggplot(training, aes(x = 1, y = TEAM_BATTING_H)) + 
+  stat_boxplot(geom ='errorbar') + geom_boxplot() + 
+  xlab("Boxplot") + ylab("") + theme(axis.text.x=element_blank(), axis.ticks.x=element_blank())
+
+# Density plot
+ggplot(training, aes(x = TEAM_BATTING_H)) + 
+  geom_histogram(aes(y=..density..), colour="black", fill="white") +
+  geom_density(alpha=.2, fill="#FF6666") + ylab("") + xlab("Density Plot with Mean") +
+  geom_vline(aes(xintercept=mean(TEAM_BATTING_H, na.rm=TRUE)), color="red", linetype="dashed", size=1)
+
+# Scatterplot
+ggplot(data=training, aes(x=TEAM_BATTING_H, y=TARGET_WINS)) + 
+  geom_point() + geom_smooth(method = "loess") +
+  xlab("Scatterplot with Best Fit Line")
+
+```
+
+**Analysis:** There are no missing values. The range and distribution are reasonable.
+
+
+#### TEAM_BATTING_2B:
+
+This variable represents number of team doubles:
+
+```{r echo=FALSE, warning=FALSE, message=FALSE, fig.width=10, fig.height=6}
+kable(sumtable[sumtable[,1]=="TEAM_BATTING_2B",2:7], row.names=FALSE)
+# Boxplot
+ggplot(training, aes(x = 1, y = TEAM_BATTING_2B)) + 
+  stat_boxplot(geom ='errorbar') + geom_boxplot() + 
+  xlab("Boxplot") + ylab("") + theme(axis.text.x=element_blank(), axis.ticks.x=element_blank())
+# Density plot
+ggplot(training, aes(x = TEAM_BATTING_2B)) + 
+  geom_histogram(aes(y=..density..), colour="black", fill="white") +
+  geom_density(alpha=.2, fill="#FF6666") + ylab("") + xlab("Density Plot with Mean") +
+  geom_vline(aes(xintercept=mean(TEAM_BATTING_2B, na.rm=TRUE)), color="red", linetype="dashed", size=1)
+# Scatterplot
+ggplot(data=training, aes(x=TEAM_BATTING_2B, y=TARGET_WINS)) + 
+  geom_point() + geom_smooth(method = "loess") +
+  xlab("Scatterplot with Best Fit Line")
+
+```
+#### TEAM_BATTING_3B: 
+
+This variable represents  number of team triples:
+
+```{r echo=FALSE, warning=FALSE, message=FALSE, fig.width=10, fig.height=6}
+kable(sumtable[sumtable[,1]=="TEAM_BATTING_3B",2:7], row.names=FALSE)
+# Boxplot
+ggplot(training, aes(x = 1, y = TEAM_BATTING_3B)) + 
+  stat_boxplot(geom ='errorbar') + geom_boxplot() + 
+  xlab("Boxplot") + ylab("") + theme(axis.text.x=element_blank(), axis.ticks.x=element_blank())
+# Density plot
+ggplot(training, aes(x = TEAM_BATTING_3B)) + 
+  geom_histogram(aes(y=..density..), colour="black", fill="white") +
+  geom_density(alpha=.2, fill="#FF6666") + ylab("") + xlab("Density Plot with Mean") +
+  geom_vline(aes(xintercept=mean(TEAM_BATTING_3B, na.rm=TRUE)), color="red", linetype="dashed", size=1)
+# Scatterplot
+ggplot(data=training, aes(x=TEAM_BATTING_3B, y=TARGET_WINS)) + 
+  geom_point() + geom_smooth(method = "loess") +
+  xlab("Scatterplot with Best Fit Line")
+
+```
+
+#### TEAM_BATTING_HR: 
+
+This variable represents  number of team triples:
+
+```{r echo=FALSE, warning=FALSE, message=FALSE, fig.width=10, fig.height=6}
+kable(sumtable[sumtable[,1]=="TEAM_BATTING_HR",2:7], row.names=FALSE)
+# Boxplot
+ggplot(training, aes(x = 1, y = TEAM_BATTING_HR)) + 
+  stat_boxplot(geom ='errorbar') + geom_boxplot() + 
+  xlab("Boxplot") + ylab("") + theme(axis.text.x=element_blank(), axis.ticks.x=element_blank())
+# Density plot
+ggplot(training, aes(x = TEAM_BATTING_HR)) + 
+  geom_histogram(aes(y=..density..), colour="black", fill="white") +
+  geom_density(alpha=.2, fill="#FF6666") + ylab("") + xlab("Density Plot with Mean") +
+  geom_vline(aes(xintercept=mean(TEAM_BATTING_HR, na.rm=TRUE)), color="red", linetype="dashed", size=1)
+# Scatterplot
+ggplot(data=training, aes(x=TEAM_BATTING_HR, y=TARGET_WINS)) + 
+  geom_point() + geom_smooth(method = "loess") +
+  xlab("Scatterplot with Best Fit Line")
+
+```
+
+**Analysis:**There are some low values in the data. So zero doesn't seem too unusual here either.
+
