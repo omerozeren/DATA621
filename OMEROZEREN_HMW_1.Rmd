@@ -127,35 +127,6 @@ training %>%
 
 The "TEAM_BATTING_HBP"" varriable has "NaN" nearly 92%.  We will exclude this variable from consideration in our model.
 
-
-
-###  Correlations Matrix Table
-
-```{r echo=FALSE, warning=FALSE, message=FALSE}
-# Correlation matrix
-cm <- cor(training, use="pairwise.complete.obs")
-cm <- cm[2:17,2:17]
-names <- c("Wins", "H", "2B", "3B", "HR", "BB", "SO", "SB", "CS", "HBP", "P-H", "P-HR", "P-BB", "P-SO", "E", "DP")
-colnames(cm) <- names; rownames(cm) <- names
-cm <- round(cm, 2)
-cmout <- as.data.frame(cm) %>% mutate_all(function(x) {
-  cell_spec(x, "latex", color = ifelse(x>0.5 | x<(-0.5),"blue","black"))
-  })
-rownames(cmout) <- names
-cmout %>%
-  kable("latex", escape = F, align = "c", row.names = TRUE) %>%
-  kable_styling("striped", full_width = F) %>%
-  row_spec(0, angle = -90)
-```
-Anything over 0.5 or under -0.5 is highlighted in blue. The matrix was created using complete pairwise observations.
-
-A few conclusions: 
-
-- Not surprisingly there is a very strong correlation between home runs batted in and home runs given up by pitching.
-- There is a negative correlation between number of triples and home runs. A less powerful team may not have enough power to hit home runs, but they get a lot of triples. 
-- THere is a strong positive correlation between number of strikeouts and home runs. More swings of the bat results in more home runs. 
-
-
 #### Correlations Matrix
 
 Let's take a look at the correlations.  The following is the correlations from the complete cases only:
@@ -165,10 +136,17 @@ training %>%
   cor(., use = "complete.obs") %>%
   corrplot(., method = "color", type = "upper", tl.col = "black", diag = FALSE)
 ```
+Anything over 0.5 or under -0.5 is highlighted in blue. The matrix was created using complete pairwise observations.
 
-#### Correlations betwen Endogenous Variable and Exogenous Variables
+A few conclusions: 
 
-Let's take a look at how the Exogenous are correlated with the response variable(Endogenous):
+- Not surprisingly there is a very strong correlation between home runs batted in and home runs given up by pitching.
+- There is a negative correlation between number of triples and home runs. A less powerful team may not have enough power to hit home runs, but they get a lot of triples. 
+- THere is a strong positive correlation between number of strikeouts and home runs. More swings of the bat results in more home runs. 
+
+#### Correlations: Endogenous and  Exogenous Variables
+
+Let's take a look at how the Exogenous(Model Inputs) are correlated with the response variable(Endogenous):
 
 ```{r warning=FALSE}
 training %>%
@@ -467,7 +445,7 @@ ggplot(data=training, aes(x=TEAM_PITCHING_H, y=TARGET_WINS)) +
 This variable represents Number of strikeouts by pitchers
 
 ```{r echo=FALSE, warning=FALSE, message=FALSE, fig.width=10, fig.height=6}
-kable(sumtable[sumtable[,1]=="TEAM_PITCHING_SO",2:8], row.names=FALSE)
+kable(sumtable[sumtable[,1]=="TEAM_PITCHING_SO",2:7], row.names=FALSE)
 # Boxplot
 ggplot(training, aes(x = 1, y = TEAM_PITCHING_SO)) + 
   stat_boxplot(geom ='errorbar') + geom_boxplot() + 
@@ -491,7 +469,7 @@ ggplot(data=training, aes(x=TEAM_PITCHING_SO, y=TARGET_WINS)) +
 This variable represents Number of wins **(Outcome)**
 
 ```{r echo=FALSE, warning=FALSE, message=FALSE, fig.width=10, fig.height=6}
-kable(sumtable[sumtable[,1]=="TARGET_WINS",2:8], row.names=FALSE)
+kable(sumtable[sumtable[,1]=="TARGET_WINS",2:7], row.names=FALSE)
 # Boxplot
 ggplot(training, aes(x = 1, y = TARGET_WINS)) + 
   stat_boxplot(geom ='errorbar') + geom_boxplot() + 
@@ -504,3 +482,123 @@ ggplot(training, aes(x = TARGET_WINS)) +
 
 ```
 **Analysis:** The range and distribution are reasonable. There are no missing values with the exception of record 1347.
+
+## Data Preparation
+
+### Fixing Missing/Zero Values
+
+First we will remove the invalid data and prep it for imputation.  We will drop the hit by pitcher variable from the dataset.
+
+```{r}
+clean_data <- function(df){
+  # Change 0's to NA so they too can be imputed
+  df <- df %>%
+  mutate(TEAM_BATTING_SO = ifelse(TEAM_BATTING_SO == 0, NA, TEAM_BATTING_SO))
+  # Remove the high pitching strikeout values
+  df[which(df$TEAM_PITCHING_SO > 5346),"TEAM_PITCHING_SO"] <- NA
+  # Drop the hit by pitcher variable
+  df %>%
+    select(-TEAM_BATTING_HBP)
+}
+training <- clean_data(training)
+evaluation <- clean_data(evaluation)
+```
+
+### KNN imputation 
+
+```{r}
+set.seed(42)
+knn <- training %>% knnImputation()
+apply_func <- function(df, knn){
+  impute_me <- is.na(df$TEAM_BATTING_SO)
+  df[impute_me,"TEAM_BATTING_SO"] <- knn[impute_me,"TEAM_BATTING_SO"] 
+  impute_me <- is.na(df$TEAM_BASERUN_SB)
+  df[impute_me,"TEAM_BASERUN_SB"] <- knn[impute_me,"TEAM_BASERUN_SB"] 
+  impute_me <- is.na(df$TEAM_BASERUN_CS)
+  df[impute_me,"TEAM_BASERUN_CS"] <- knn[impute_me,"TEAM_BASERUN_CS"] 
+  impute_me <- is.na(df$TEAM_PITCHING_SO)
+  df[impute_me,"TEAM_PITCHING_SO"] <- knn[impute_me,"TEAM_PITCHING_SO"]
+  impute_me <- is.na(df$TEAM_FIELDING_DP)
+  df[impute_me,"TEAM_FIELDING_DP"] <- knn[impute_me,"TEAM_FIELDING_DP"]
+  return(df)
+}
+training <- apply_func(training, knn)
+```
+### Feature Engineering
+
+The batting singles is not included but we can back it out of the hits.  We will do this.
+
+```{r}
+add_features <- function(df){
+  df %>%
+    mutate(TEAM_BATTING_1B = TEAM_BATTING_H - TEAM_BATTING_2B - TEAM_BATTING_3B - TEAM_BATTING_HR)
+}
+training <- add_features(training)
+evaluation <- add_features(evaluation)
+```
+### Model Data Look
+
+Here's what the data look like after imputation and correction:
+
+```{r warning=FALSE}
+training %>%
+  gather(variable, value) %>%
+  ggplot(., aes(value)) + 
+  geom_density(fill = "indianred4", color="indianred4") + 
+  facet_wrap(~variable, scales ="free", ncol = 4) +
+  labs(x = element_blank(), y = element_blank())
+```
+
+```{r}
+quick_summary <- function(df){
+  df %>%
+    summary() %>%
+    kable() %>%
+    kable_styling()
+}
+quick_summary(training)
+```
+
+## Model Building
+
+### Model 1
+
+The first model includes several variables, selected manually, that have higher than average correlation to the target variable. They cover hitting, walking and fielding errors.
+
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+m1 <- lm(TARGET_WINS ~ TEAM_BATTING_H + TEAM_BATTING_BB + TEAM_FIELDING_E, data=training)
+summary(m1)
+```
+
+All variables are significant, but the $R^2$ value is relatively small at 0.2356.
+
+### Model 2
+
+The second model expand the base hit variable, `TEAM_BATTING_H`, into its components - singles, doubles, triples and home runs. 
+
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+m2 <- lm(TARGET_WINS ~ TEAM_BATTING_1B + TEAM_BATTING_2B + TEAM_BATTING_3B + TEAM_BATTING_HR + 
+           TEAM_BATTING_BB + TEAM_FIELDING_E, data=training)
+summary(m2)
+```
+
+All variables are still significant and $R^2$ is slightly improved at 0.2574.
+
+
+### Higher Order Stepwise Regression
+
+For the third model we will use a stepwise regression method using a backwards elimination process.  We also introduce some higher order polynomial variables.
+
+```{r}
+full_formula <- "TARGET_WINS ~ TEAM_BATTING_2B + TEAM_BATTING_3B + TEAM_BATTING_HR + TEAM_BATTING_BB + TEAM_BATTING_SO + TEAM_BASERUN_SB + TEAM_BASERUN_CS + TEAM_PITCHING_H + TEAM_PITCHING_HR + TEAM_PITCHING_BB + TEAM_PITCHING_SO + TEAM_FIELDING_E + TEAM_FIELDING_DP + TEAM_BATTING_1B + I(TEAM_BATTING_2B^2) + I(TEAM_BATTING_3B^2) + I(TEAM_BATTING_HR^2) + I(TEAM_BATTING_BB^2) + I(TEAM_BATTING_SO^2) + I(TEAM_BASERUN_SB^2) + I(TEAM_BASERUN_CS^2) + I(TEAM_PITCHING_H^2) + I(TEAM_PITCHING_HR^2) + I(TEAM_PITCHING_BB^2) + I(TEAM_PITCHING_SO^2) + I(TEAM_FIELDING_E^2) + I(TEAM_FIELDING_DP^2) + I(TEAM_BATTING_1B^2) "
+full_model <- lm(full_formula, training)
+step_back <- MASS::stepAIC(full_model, direction="backward", trace = F)
+poly_call <- summary(step_back)$call
+step_back <- lm(poly_call[2], training)
+summary(step_back)
+```
+This model has the highest adjusted R-squared value .Some variables p-values are not in 95 % siginificant level but they are in 90 % significant level which is acceptable.
+
+## Model Selection
+
+In order to select which model is the "best" we will test it against a validation(evaluation) set.  We will examine the difference between the predicted and actual values.
