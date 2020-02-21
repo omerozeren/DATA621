@@ -45,6 +45,7 @@ for (i in 2:17) {
                  )
 }
 colnames(sumtable) <- c("", "Min", "Median", "Mean", "SD", "Max", "Num of NaN")
+sumtable
 ```
 We have been given a dataset with `r nrow(training)` records summarizing a major league baseball team's season.
 All statistics have been adjusted to match the performance of a 162 game season.The objective is to build a linear regression model to predict the number of wins for a team.
@@ -126,7 +127,36 @@ training %>%
 
 The "TEAM_BATTING_HBP"" varriable has "NaN" nearly 92%.  We will exclude this variable from consideration in our model.
 
-### Correlations Matrix
+
+
+###  Correlations Matrix Table
+
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+# Correlation matrix
+cm <- cor(training, use="pairwise.complete.obs")
+cm <- cm[2:17,2:17]
+names <- c("Wins", "H", "2B", "3B", "HR", "BB", "SO", "SB", "CS", "HBP", "P-H", "P-HR", "P-BB", "P-SO", "E", "DP")
+colnames(cm) <- names; rownames(cm) <- names
+cm <- round(cm, 2)
+cmout <- as.data.frame(cm) %>% mutate_all(function(x) {
+  cell_spec(x, "latex", color = ifelse(x>0.5 | x<(-0.5),"blue","black"))
+  })
+rownames(cmout) <- names
+cmout %>%
+  kable("latex", escape = F, align = "c", row.names = TRUE) %>%
+  kable_styling("striped", full_width = F) %>%
+  row_spec(0, angle = -90)
+```
+Anything over 0.5 or under -0.5 is highlighted in blue. The matrix was created using complete pairwise observations.
+
+A few conclusions: 
+
+- Not surprisingly there is a very strong correlation between home runs batted in and home runs given up by pitching.
+- There is a negative correlation between number of triples and home runs. A less powerful team may not have enough power to hit home runs, but they get a lot of triples. 
+- THere is a strong positive correlation between number of strikeouts and home runs. More swings of the bat results in more home runs. 
+
+
+#### Correlations Matrix
 
 Let's take a look at the correlations.  The following is the correlations from the complete cases only:
 
@@ -135,6 +165,7 @@ training %>%
   cor(., use = "complete.obs") %>%
   corrplot(., method = "color", type = "upper", tl.col = "black", diag = FALSE)
 ```
+
 #### Correlations betwen Endogenous Variable and Exogenous Variables
 
 Let's take a look at how the Exogenous are correlated with the response variable(Endogenous):
@@ -246,3 +277,230 @@ ggplot(data=training, aes(x=TEAM_BATTING_HR, y=TARGET_WINS)) +
 
 **Analysis:**There are some low values in the data. So zero doesn't seem too unusual here either.
 
+
+#### TEAM_BATTING_BB: 
+
+This variable represents Number of team walks
+
+```{r echo=FALSE, warning=FALSE, message=FALSE, fig.width=10, fig.height=6}
+kable(sumtable[sumtable[,1]=="TEAM_BATTING_BB",2:7], row.names=FALSE)
+# Boxplot
+ggplot(training, aes(x = 1, y = TEAM_BATTING_BB)) + 
+  stat_boxplot(geom ='errorbar') + geom_boxplot() + 
+  xlab("Boxplot") + ylab("") + theme(axis.text.x=element_blank(), axis.ticks.x=element_blank())
+# Density plot
+ggplot(training, aes(x = TEAM_BATTING_BB)) + 
+  geom_histogram(aes(y=..density..), colour="black", fill="white") +
+  geom_density(alpha=.2, fill="#FF6666") + ylab("") + xlab("Density Plot with Mean") +
+  geom_vline(aes(xintercept=mean(TEAM_BATTING_BB, na.rm=TRUE)), color="red", linetype="dashed", size=1)
+# Scatterplot
+ggplot(data=training, aes(x=TEAM_BATTING_BB, y=TARGET_WINS)) + 
+  geom_point() + geom_smooth(method = "loess") +
+  xlab("Scatterplot with Best Fit Line")
+```
+
+#### TEAM_BATTING_HBP: 
+
+This variable represents Number of team batters hit by pitch
+
+```{r echo=FALSE, warning=FALSE, message=FALSE, fig.width=10, fig.height=6}
+kable(sumtable[sumtable[,1]=="TEAM_BATTING_HBP",2:7], row.names=FALSE)
+# Boxplot
+ggplot(training, aes(x = 1, y = TEAM_BATTING_HBP)) + 
+  stat_boxplot(geom ='errorbar') + geom_boxplot() + 
+  xlab("Boxplot") + ylab("") + theme(axis.text.x=element_blank(), axis.ticks.x=element_blank())
+# Density plot
+ggplot(training, aes(x = TEAM_BATTING_HBP)) + 
+  geom_histogram(aes(y=..density..), colour="black", fill="white") +
+  geom_density(alpha=.2, fill="#FF6666") + ylab("") + xlab("Density Plot with Mean") +
+  geom_vline(aes(xintercept=mean(TEAM_BATTING_HBP, na.rm=TRUE)), color="red", linetype="dashed", size=1)
+# Scatterplot
+ggplot(data=training, aes(x=TEAM_BATTING_HBP, y=TARGET_WINS)) + 
+  geom_point() + geom_smooth(method = "loess") +
+  xlab("Scatterplot with Best Fit Line")
+
+```
+
+**Analysis:** There are 2,085 records - 91.6% of data set - that are missing value. Because this variable is missing for majority of records, I wont consider this variable as input for regression model.
+
+#### TEAM_BATTING_SO: 
+
+This variable represents Number of team strikeouts by batters
+
+```{r echo=FALSE, warning=FALSE, message=FALSE, fig.width=10, fig.height=6}
+kable(sumtable[sumtable[,1]=="TEAM_BATTING_SO",2:7], row.names=FALSE)
+# Boxplot
+ggplot(training, aes(x = 1, y = TEAM_BATTING_SO)) + 
+  stat_boxplot(geom ='errorbar') + geom_boxplot() + 
+  xlab("Boxplot") + ylab("") + theme(axis.text.x=element_blank(), axis.ticks.x=element_blank())
+# Density plot
+ggplot(training, aes(x = TEAM_BATTING_SO)) + 
+  geom_histogram(aes(y=..density..), colour="black", fill="white") +
+  geom_density(alpha=.2, fill="#FF6666") + ylab("") + xlab("Density Plot with Mean") +
+  geom_vline(aes(xintercept=mean(TEAM_BATTING_SO, na.rm=TRUE)), color="red", linetype="dashed", size=1)
+# Scatterplot
+ggplot(data=training, aes(x=TEAM_BATTING_SO, y=TARGET_WINS)) + 
+  geom_point() + geom_smooth(method = "loess") +
+  xlab("Scatterplot with Best Fit Line")
+
+```
+
+**Analysis:** There are 122 records with missing or zero value (as wtih other variables a zero value is unrealistic). These values can be imputed. Similarly to homeruns, the distribution is multimodal, which is interesting enough for additional analysis. Another area of concern is a noticeable left tail. It is highly unlikely to have games without any strikeouts, so anything lower than 162 (average of 1 strikeout per game) is definitely suspect.
+
+#### TEAM_BASERUN_SB: 
+
+This variable represents Number of team stolen bases
+
+```{r echo=FALSE, warning=FALSE, message=FALSE, fig.width=10, fig.height=6}
+kable(sumtable[sumtable[,1]=="TEAM_BASERUN_SB",2:7], row.names=FALSE)
+# Boxplot
+ggplot(training, aes(x = 1, y = TEAM_BASERUN_SB)) + 
+  stat_boxplot(geom ='errorbar') + geom_boxplot() + 
+  xlab("Boxplot") + ylab("") + theme(axis.text.x=element_blank(), axis.ticks.x=element_blank())
+# Density plot
+ggplot(training, aes(x = TEAM_BASERUN_SB)) + 
+  geom_histogram(aes(y=..density..), colour="black", fill="white") +
+  geom_density(alpha=.2, fill="#FF6666") + ylab("") + xlab("Density Plot with Mean") +
+  geom_vline(aes(xintercept=mean(TEAM_BASERUN_SB, na.rm=TRUE)), color="red", linetype="dashed", size=1)
+# Scatterplot
+ggplot(data=training, aes(x=TEAM_BASERUN_SB, y=TARGET_WINS)) + 
+  geom_point() + geom_smooth(method = "loess") +
+  xlab("Scatterplot with Best Fit Line")
+
+```
+
+#### TEAM_FIELDING_E: 
+
+This variable represents  Number of team fielding errors
+
+```{r echo=FALSE, warning=FALSE, message=FALSE, fig.width=10, fig.height=6}
+kable(sumtable[sumtable[,1]=="TEAM_FIELDING_E",2:7], row.names=FALSE)
+# Boxplot
+ggplot(training, aes(x = 1, y = TEAM_FIELDING_E)) + 
+  stat_boxplot(geom ='errorbar') + geom_boxplot() + 
+  xlab("Boxplot") + ylab("") + theme(axis.text.x=element_blank(), axis.ticks.x=element_blank())
+# Density plot
+ggplot(training, aes(x = TEAM_FIELDING_E)) + 
+  geom_histogram(aes(y=..density..), colour="black", fill="white") +
+  geom_density(alpha=.2, fill="#FF6666") + ylab("") + xlab("Density Plot with Mean") +
+  geom_vline(aes(xintercept=mean(TEAM_FIELDING_E, na.rm=TRUE)), color="red", linetype="dashed", size=1)
+# Scatterplot
+ggplot(data=training, aes(x=TEAM_FIELDING_E, y=TARGET_WINS)) + 
+  geom_point() + geom_smooth(method = "loess") +
+  xlab("Scatterplot with Best Fit Line")
+
+```
+
+#### TEAM_FIELDING_DP: 
+
+This variable represents Number of team fielding double plays
+
+```{r echo=FALSE, warning=FALSE, message=FALSE, fig.width=10, fig.height=6}
+kable(sumtable[sumtable[,1]=="TEAM_FIELDING_DP",2:7], row.names=FALSE)
+# Boxplot
+ggplot(training, aes(x = 1, y = TEAM_FIELDING_DP)) + 
+  stat_boxplot(geom ='errorbar') + geom_boxplot() + 
+  xlab("Boxplot") + ylab("") + theme(axis.text.x=element_blank(), axis.ticks.x=element_blank())
+# Density plot
+ggplot(training, aes(x = TEAM_FIELDING_DP)) + 
+  geom_histogram(aes(y=..density..), colour="black", fill="white") +
+  geom_density(alpha=.2, fill="#FF6666") + ylab("") + xlab("Density Plot with Mean") +
+  geom_vline(aes(xintercept=mean(TEAM_FIELDING_DP, na.rm=TRUE)), color="red", linetype="dashed", size=1)
+# Scatterplot
+ggplot(data=training, aes(x=TEAM_FIELDING_DP, y=TARGET_WINS)) + 
+  geom_point() + geom_smooth(method = "loess") +
+  xlab("Scatterplot with Best Fit Line")
+
+```
+
+#### TEAM_PITCHING_BB: 
+
+This variable represents Number of walks given up by pitchers
+
+```{r echo=FALSE, warning=FALSE, message=FALSE, fig.width=10, fig.height=6}
+kable(sumtable[sumtable[,1]=="TEAM_PITCHING_BB",2:7], row.names=FALSE)
+# Boxplot
+ggplot(training, aes(x = 1, y = TEAM_PITCHING_BB)) + 
+  stat_boxplot(geom ='errorbar') + geom_boxplot() + 
+  xlab("Boxplot") + ylab("") + theme(axis.text.x=element_blank(), axis.ticks.x=element_blank())
+# Density plot
+ggplot(training, aes(x = TEAM_PITCHING_BB)) + 
+  geom_histogram(aes(y=..density..), colour="black", fill="white") +
+  geom_density(alpha=.2, fill="#FF6666") + ylab("") + xlab("Density Plot with Mean") +
+  geom_vline(aes(xintercept=mean(TEAM_PITCHING_BB, na.rm=TRUE)), color="red", linetype="dashed", size=1)
+# Scatterplot
+ggplot(data=training, aes(x=TEAM_PITCHING_BB, y=TARGET_WINS)) + 
+  geom_point() + geom_smooth(method = "loess") +
+  xlab("Scatterplot with Best Fit Line")
+
+```
+
+**Analysis:** There are no missing values with the exception of record 1347 which will be deleted from model building. There are some unrealistic outliers.
+
+
+#### TEAM_PITCHING_H: 
+
+This variable represents Number of base hits given up by pitchers
+
+```{r echo=FALSE, warning=FALSE, message=FALSE, fig.width=10, fig.height=6}
+kable(sumtable[sumtable[,1]=="TEAM_PITCHING_H",2:7], row.names=FALSE)
+# Boxplot
+ggplot(training, aes(x = 1, y = TEAM_PITCHING_H)) + 
+  stat_boxplot(geom ='errorbar') + geom_boxplot() + 
+  xlab("Boxplot") + ylab("") + theme(axis.text.x=element_blank(), axis.ticks.x=element_blank())
+# Density plot
+ggplot(training, aes(x = TEAM_PITCHING_H)) + 
+  geom_histogram(aes(y=..density..), colour="black", fill="white") +
+  geom_density(alpha=.2, fill="#FF6666") + ylab("") + xlab("Density Plot with Mean") +
+  geom_vline(aes(xintercept=mean(TEAM_PITCHING_H, na.rm=TRUE)), color="red", linetype="dashed", size=1)
+# Scatterplot
+ggplot(data=training, aes(x=TEAM_PITCHING_H, y=TARGET_WINS)) + 
+  geom_point() + geom_smooth(method = "loess") +
+  xlab("Scatterplot with Best Fit Line")
+
+```
+
+**Analysis:** Similar to `TEAM_PITCHING_BB` above, there are no missing value, but there issues with outliers. Based on visualizations, this variable will be capped at 13,000 and any value over this will be set to this cap.
+
+#### TEAM_PITCHING_SO:
+
+This variable represents Number of strikeouts by pitchers
+
+```{r echo=FALSE, warning=FALSE, message=FALSE, fig.width=10, fig.height=6}
+kable(sumtable[sumtable[,1]=="TEAM_PITCHING_SO",2:8], row.names=FALSE)
+# Boxplot
+ggplot(training, aes(x = 1, y = TEAM_PITCHING_SO)) + 
+  stat_boxplot(geom ='errorbar') + geom_boxplot() + 
+  xlab("Boxplot") + ylab("") + theme(axis.text.x=element_blank(), axis.ticks.x=element_blank())
+# Density plot
+ggplot(training, aes(x = TEAM_PITCHING_SO)) + 
+  geom_histogram(aes(y=..density..), colour="black", fill="white") +
+  geom_density(alpha=.2, fill="#FF6666") + ylab("") + xlab("Density Plot with Mean") +
+  geom_vline(aes(xintercept=mean(TEAM_PITCHING_SO, na.rm=TRUE)), color="red", linetype="dashed", size=1)
+# Scatterplot
+ggplot(data=training, aes(x=TEAM_PITCHING_SO, y=TARGET_WINS)) + 
+  geom_point() + geom_smooth(method = "loess") +
+  xlab("Scatterplot with Best Fit Line")
+
+```
+
+**Analysis:** This variable has 122 missing or zero values. They can be imputed as needed. There is also an outlier issue as graph shows.
+
+#### TARGET_WINS: 
+
+This variable represents Number of wins **(Outcome)**
+
+```{r echo=FALSE, warning=FALSE, message=FALSE, fig.width=10, fig.height=6}
+kable(sumtable[sumtable[,1]=="TARGET_WINS",2:8], row.names=FALSE)
+# Boxplot
+ggplot(training, aes(x = 1, y = TARGET_WINS)) + 
+  stat_boxplot(geom ='errorbar') + geom_boxplot() + 
+  xlab("Boxplot") + ylab("") + theme(axis.text.x=element_blank(), axis.ticks.x=element_blank())
+# Density plot
+ggplot(training, aes(x = TARGET_WINS)) + 
+  geom_histogram(aes(y=..density..), colour="black", fill="white") +
+  geom_density(alpha=.2, fill="#FF6666") + ylab("") + xlab("Density Plot with Mean") +
+  geom_vline(aes(xintercept=mean(TARGET_WINS, na.rm=TRUE)), color="red", linetype="dashed", size=1)
+
+```
+**Analysis:** The range and distribution are reasonable. There are no missing values with the exception of record 1347.
