@@ -45,9 +45,7 @@ The data set includes 8,161 observations with 24 variables (excluding the target
 #### Summary of Variables
 
 ```{r echo=FALSE, warning=FALSE}
-ins <- read.csv(url(paste0("https://raw.githubusercontent.com/",
-                           "ilyakats/CUNY-DATA621/master/hw4/",
-                           "insurance_training_data.csv")),
+ins <- read.csv(url(paste0("https://raw.githubusercontent.com/omerozeren/DATA621/master/insurance_training_data.csv")),
                 na.strings=c("","NA"))
 ins$INCOME <- as.numeric(gsub('[$,]', '', ins$INCOME)) # Convert income from Factor to Numeric
 ins$HOME_VAL <- as.numeric(gsub('[$,]', '', ins$HOME_VAL)) # Convert home value from Factor to Numeric
@@ -505,3 +503,42 @@ legend("topright", inset=0.05, bty="n",
 ```
 
 Variation between model is small, so this approach did not generate significant improvement. Please see the Summary section in the beginning of the report for more analysis of linear model results.
+
+## Evaluation Data Set
+
+For illustration purposes, this report only includes the first 100 entries in the `insurance-evaluation-data.csv` file.
+
+Evalution data is missing some `INCOME` and `HOME_EVAL` values that are used in the binary regression model. Rather than trying to impute those values by replacing them with 0 or mean or media values or by building a model to predict them, these values are left as they are and the model cannot be used to predict the outcome for corresponding observations. Approach to imputing these values may change based on the situation and for this report, this part was not assumed. If any of these variables are likely to be missing in real-world use it may be worthwhile investigating omitting these variables from the model altogether.
+
+```{r echo=FALSE, warning=FALSE}
+eval <- read.csv(url(paste0("https://raw.githubusercontent.com/omerozeren/DATA621/master/insurance-evaluation-data.csv")),
+                 na.strings=c("","NA"))
+results <- eval[,1]
+eval$INCOME <- as.numeric(gsub('[$,]', '', eval$INCOME)) # Convert income from Factor to Numeric
+eval$HOME_VAL <- as.numeric(gsub('[$,]', '', eval$HOME_VAL)) # Convert home value from Factor to Numeric
+levels(eval$MSTATUS)[match("z_No",levels(eval$MSTATUS))] <- "No" # Remove 'z_'
+levels(eval$SEX)[match("z_F",levels(eval$SEX))] <- "F" # Remove 'z_'
+levels(eval$EDUCATION)[match("z_High School",levels(eval$EDUCATION))] <- "High School" # Remove 'z_'
+eval$EDUCATION <- factor(eval$EDUCATION,levels(eval$EDUCATION)[c(1,5,2:4)]) # Reorder levels
+levels(eval$JOB)[match("z_Blue Collar",levels(eval$JOB))] <- "Blue Collar" # Remove 'z_'
+eval$BLUEBOOK <- as.numeric(gsub('[$,]', '', eval$BLUEBOOK)) # Convert value from Factor to Numeric
+levels(eval$CAR_TYPE)[match("z_SUV",levels(eval$CAR_TYPE))] <- "SUV" # Remove 'z_'
+levels(eval$RED_CAR)[match("no",levels(eval$RED_CAR))] <- "No"
+levels(eval$RED_CAR)[match("yes",levels(eval$RED_CAR))] <- "Yes"
+eval$OLDCLAIM <- as.numeric(gsub('[$,]', '', eval$OLDCLAIM)) # Convert from Factor to Numeric
+levels(eval$URBANICITY)[match("Highly Urban/ Urban",levels(eval$URBANICITY))] <- "Urban"
+levels(eval$URBANICITY)[match("z_Highly Rural/ Rural",levels(eval$URBANICITY))] <- "Rural"
+eval$JOB <- factor(eval$JOB,levels(eval$JOB)[c(7, 8, 3, 1, 6, 5, 4, 2)]) # Reorder levels
+eval <- eval[-c(1)]
+pred <- predict(model, newdata=eval, type="response")
+results <- cbind(results, prob=round(pred,4))
+results <- cbind(results, predict=round(pred,0))
+pred <- predict(lmModel, newdata=eval, type="response")
+results <- cbind(results, exp(pred))
+results <- as.data.frame(results)
+results[results$predict==0 & !is.na(results$predict),'V4'] <- NA
+results[is.na(results$predict),'V4'] <- NA
+colnames(results) <- c("Index", "TARGET_FLAG Prob.", "TARGET_FLAG", "TARGET_AMT")
+pander(head(results, 100))
+```
+
