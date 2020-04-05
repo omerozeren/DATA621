@@ -1,0 +1,1102 @@
+\documentclass[]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\usepackage{fixltx2e} % provides \textsubscript
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+\else % if luatex or xelatex
+  \ifxetex
+    \usepackage{mathspec}
+  \else
+    \usepackage{fontspec}
+  \fi
+  \defaultfontfeatures{Ligatures=TeX,Scale=MatchLowercase}
+\fi
+% use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+% use microtype if available
+\IfFileExists{microtype.sty}{%
+\usepackage{microtype}
+\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\usepackage[margin=1in]{geometry}
+\usepackage{hyperref}
+\hypersetup{unicode=true,
+            pdftitle={HMW 3- Data 621},
+            pdfauthor={OMER OZEREN},
+            pdfborder={0 0 0},
+            breaklinks=true}
+\urlstyle{same}  % don't use monospace font for urls
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+\IfFileExists{parskip.sty}{%
+\usepackage{parskip}
+}{% else
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+}
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{0}
+% Redefines (sub)paragraphs to behave more like sections
+\ifx\paragraph\undefined\else
+\let\oldparagraph\paragraph
+\renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+\let\oldsubparagraph\subparagraph
+\renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+
+%%% Use protect on footnotes to avoid problems with footnotes in titles
+\let\rmarkdownfootnote\footnote%
+\def\footnote{\protect\rmarkdownfootnote}
+
+%%% Change title format to be more compact
+\usepackage{titling}
+
+% Create subtitle command for use in maketitle
+\newcommand{\subtitle}[1]{
+  \posttitle{
+    \begin{center}\large#1\end{center}
+    }
+}
+
+\setlength{\droptitle}{-2em}
+
+  \title{HMW 3- Data 621}
+    \pretitle{\vspace{\droptitle}\centering\huge}
+  \posttitle{\par}
+    \author{OMER OZEREN}
+    \preauthor{\centering\large\emph}
+  \postauthor{\par}
+    \date{}
+    \predate{}\postdate{}
+  
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{wrapfig}
+\usepackage{float}
+\usepackage{colortbl}
+\usepackage{pdflscape}
+\usepackage{tabu}
+\usepackage{threeparttable}
+\usepackage{threeparttablex}
+\usepackage[normalem]{ulem}
+\usepackage{makecell}
+\usepackage{xcolor}
+
+\begin{document}
+\maketitle
+
+{
+\setcounter{tocdepth}{5}
+\tableofcontents
+}
+\hypertarget{summary}{%
+\subsection{Summary}\label{summary}}
+
+This report covers an attempt to build a binary logistic regression
+model to predict whether the crime rate is above the median crime rate.
+The model is based on a data set containing information on crime for
+various Boston neighborhoods.
+
+\hypertarget{data-exploration}{%
+\subsection{Data Exploration}\label{data-exploration}}
+
+The data set includes 466 observations with 12 variables (excluding the
+target variable).
+
+\hypertarget{summary-of-variables}{%
+\paragraph{Summary of Variables}\label{summary-of-variables}}
+
+\begin{verbatim}
+##    Variable      Min    Median         Mean          SD      Max
+## 1        zn   0.0000   0.00000  11.57725322  23.3646511 100.0000
+## 2     indus   0.4600   9.69000  11.10502146   6.8458549  27.7400
+## 3      chas   0.0000   0.00000   0.07081545   0.2567920   1.0000
+## 4       nox   0.3890   0.53800   0.55431052   0.1166667   0.8710
+## 5        rm   3.8630   6.21000   6.29067382   0.7048513   8.7800
+## 6       age   2.9000  77.15000  68.36759657  28.3213784 100.0000
+## 7       dis   1.1296   3.19095   3.79569292   2.1069496  12.1265
+## 8       rad   1.0000   5.00000   9.53004292   8.6859272  24.0000
+## 9       tax 187.0000 334.50000 409.50214592 167.9000887 711.0000
+## 10  ptratio  12.6000  18.90000  18.39849785   2.1968447  22.0000
+## 11    lstat   1.7300  11.35000  12.63145923   7.1018907  37.9700
+## 12     medv   5.0000  21.20000  22.58927039   9.2396814  50.0000
+## 13   target   0.0000   0.00000   0.49141631   0.5004636   1.0000
+##    Num of NAs Num of Zeros
+## 1           0          339
+## 2           0            0
+## 3           0          433
+## 4           0            0
+## 5           0            0
+## 6           0            0
+## 7           0            0
+## 8           0            0
+## 9           0            0
+## 10          0            0
+## 11          0            0
+## 12          0            0
+## 13          0          237
+\end{verbatim}
+
+\hypertarget{independent-variables}{%
+\paragraph{Independent Variables}\label{independent-variables}}
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{zn} - \emph{proportion of residential land zoned for large
+  lots (over 25,000 square feet)} - 339 out of 466 (or about 76\%) of
+  observations have a value of 0. It is possible that majority of
+  neighborhoods will not have any residential land zoned for large lots.
+  Therefore, it is likely that 0 represents a valid value rather than a
+  missing one.
+\item
+  \texttt{indus} - \emph{proportion of non-retail business acres per
+  suburb}
+\item
+  \texttt{chas} - \emph{a dummy variable for whether the suburb borders
+  the Charles River (1) or not (0)} - 433 out of 466 (or about 92.9\%)
+  of observations have a value of 0. Even though the Charles River is a
+  promimnent feature of the Boston area, it is quite reasonable to
+  assume that most neighborhoods do not border the river.
+\item
+  \texttt{nox} - \emph{nitrogen oxides concentration (parts per 10
+  million)} - Looking at the scatterplot there seems to be some
+  correlation between the nitrogen oxides concentration and the target
+  variable.
+\end{itemize}
+
+\includegraphics{OMEROZEREN_HMW_3_files/figure-latex/unnamed-chunk-2-1.pdf}
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{rm} - \emph{average number of rooms per dwelling} - Because
+  this is an average of number of rooms, this is a continous variable.
+\item
+  \texttt{age} - \emph{proportion of owner-occupied units built prior to
+  1940} - There is nothing unusual about this variable; however, it is
+  interesting to note that the mean of 68.37 and median of 77.15 shows
+  that there is a large number of pre-war buildings. Not surprising for
+  an old city like Boston.
+\item
+  \texttt{dis} - \emph{weighted mean of distances to five Boston
+  employment centers} - Majority of observations above the median crime
+  rate are within 5 miles of an employment center (there are only 2
+  observations over 5 miles away). And there may be some correlation
+  between distance and the target variable.
+\item
+  \texttt{rad} - \emph{index of accessibility to radial highways} - This
+  is a discrete variable with 9 different values in the observations (1
+  through 8 and 24). The smallest bucket is \texttt{rad} value of 7 with
+  15 observations.
+\item
+  \texttt{tax} - \emph{full-value property-tax rate per \$10,000}
+\item
+  \texttt{ptratio} - \emph{pupil-teacher ratio by town}
+\item
+  \texttt{lstat} - \emph{lower status of the population (percent)}
+\item
+  \texttt{medv} - \emph{median value of owner-occupied homes in \$1000s}
+\end{itemize}
+
+\hypertarget{targetdependent-variable}{%
+\paragraph{Target/Dependent Variable}\label{targetdependent-variable}}
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{target} - \emph{whether the crime rate is above the median
+  crime rate (1) or not (0)} - There are 237 observation with
+  \texttt{target} value of 0 and 229 observations with \texttt{target}
+  value of 1 making it about 50/50 split, or more precisely there are
+  \textbf{50.86\% of 0s and 49.14\% of 1s}.
+\end{itemize}
+
+\hypertarget{correlation-matrix}{%
+\paragraph{Correlation Matrix}\label{correlation-matrix}}
+
+Below is the correlation matrix for the data set.
+
+\begin{itemize}
+\tightlist
+\item
+  There is a very high correlation (0.91) between \texttt{tax} and
+  \texttt{rad}. Meaning behind \texttt{rad} values/categories is not
+  explicitly specified. It may be that the higher the highway
+  accessibility is, the higher property taxes are. Alternatively, radial
+  highways and higher property taxes may signify suburbs while lack of
+  radial highways may imply inner city (with possibly poorer, lower
+  taxed properties).
+\item
+  \texttt{nox} has the highest correlation with the target variable, but
+  \texttt{age}, \texttt{dis}, \texttt{rad} and \texttt{tax} are also
+  fairly highly correlated to \texttt{target} (above 0.6).
+\item
+  The following pairs have correlation at or above 0.7 (or below -0.7 in
+  case of negative correlation): \texttt{nox}/\texttt{indus},
+  \texttt{dis}/\texttt{indus}, \texttt{tax}/\texttt{indus},
+  \texttt{age}/\texttt{nox}, \texttt{dis}/\texttt{nox},
+  \texttt{medv}/\texttt{rm}, \texttt{dis}/\texttt{age} and
+  \texttt{medv}/\texttt{lstat}.
+\end{itemize}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{l|c|c|c|c|c|c|c|c|c|c|c|c|c}
+\hline
+  & zn & indus & chas & nox & rm & age & dis & rad & tax & ptratio & lstat & medv & target\\
+\hline
+zn & \textcolor{blue}{1} & \textcolor{black}{-0.54} & \textcolor{black}{-0.04} & \textcolor{black}{-0.52} & \textcolor{black}{0.32} & \textcolor{black}{-0.57} & \textcolor{black}{0.66} & \textcolor{black}{-0.32} & \textcolor{black}{-0.32} & \textcolor{black}{-0.39} & \textcolor{black}{-0.43} & \textcolor{black}{0.38} & \textcolor{black}{-0.43}\\
+\hline
+indus & \textcolor{black}{-0.54} & \textcolor{blue}{1} & \textcolor{black}{0.06} & \textcolor{blue}{0.76} & \textcolor{black}{-0.39} & \textcolor{black}{0.64} & \textcolor{blue}{-0.7} & \textcolor{black}{0.6} & \textcolor{blue}{0.73} & \textcolor{black}{0.39} & \textcolor{black}{0.61} & \textcolor{black}{-0.5} & \textcolor{black}{0.6}\\
+\hline
+chas & \textcolor{black}{-0.04} & \textcolor{black}{0.06} & \textcolor{blue}{1} & \textcolor{black}{0.1} & \textcolor{black}{0.09} & \textcolor{black}{0.08} & \textcolor{black}{-0.1} & \textcolor{black}{-0.02} & \textcolor{black}{-0.05} & \textcolor{black}{-0.13} & \textcolor{black}{-0.05} & \textcolor{black}{0.16} & \textcolor{black}{0.08}\\
+\hline
+nox & \textcolor{black}{-0.52} & \textcolor{blue}{0.76} & \textcolor{black}{0.1} & \textcolor{blue}{1} & \textcolor{black}{-0.3} & \textcolor{blue}{0.74} & \textcolor{blue}{-0.77} & \textcolor{black}{0.6} & \textcolor{black}{0.65} & \textcolor{black}{0.18} & \textcolor{black}{0.6} & \textcolor{black}{-0.43} & \textcolor{blue}{0.73}\\
+\hline
+rm & \textcolor{black}{0.32} & \textcolor{black}{-0.39} & \textcolor{black}{0.09} & \textcolor{black}{-0.3} & \textcolor{blue}{1} & \textcolor{black}{-0.23} & \textcolor{black}{0.2} & \textcolor{black}{-0.21} & \textcolor{black}{-0.3} & \textcolor{black}{-0.36} & \textcolor{black}{-0.63} & \textcolor{blue}{0.71} & \textcolor{black}{-0.15}\\
+\hline
+age & \textcolor{black}{-0.57} & \textcolor{black}{0.64} & \textcolor{black}{0.08} & \textcolor{blue}{0.74} & \textcolor{black}{-0.23} & \textcolor{blue}{1} & \textcolor{blue}{-0.75} & \textcolor{black}{0.46} & \textcolor{black}{0.51} & \textcolor{black}{0.26} & \textcolor{black}{0.61} & \textcolor{black}{-0.38} & \textcolor{black}{0.63}\\
+\hline
+dis & \textcolor{black}{0.66} & \textcolor{blue}{-0.7} & \textcolor{black}{-0.1} & \textcolor{blue}{-0.77} & \textcolor{black}{0.2} & \textcolor{blue}{-0.75} & \textcolor{blue}{1} & \textcolor{black}{-0.49} & \textcolor{black}{-0.53} & \textcolor{black}{-0.23} & \textcolor{black}{-0.51} & \textcolor{black}{0.26} & \textcolor{black}{-0.62}\\
+\hline
+rad & \textcolor{black}{-0.32} & \textcolor{black}{0.6} & \textcolor{black}{-0.02} & \textcolor{black}{0.6} & \textcolor{black}{-0.21} & \textcolor{black}{0.46} & \textcolor{black}{-0.49} & \textcolor{blue}{1} & \textcolor{blue}{0.91} & \textcolor{black}{0.47} & \textcolor{black}{0.5} & \textcolor{black}{-0.4} & \textcolor{black}{0.63}\\
+\hline
+tax & \textcolor{black}{-0.32} & \textcolor{blue}{0.73} & \textcolor{black}{-0.05} & \textcolor{black}{0.65} & \textcolor{black}{-0.3} & \textcolor{black}{0.51} & \textcolor{black}{-0.53} & \textcolor{blue}{0.91} & \textcolor{blue}{1} & \textcolor{black}{0.47} & \textcolor{black}{0.56} & \textcolor{black}{-0.49} & \textcolor{black}{0.61}\\
+\hline
+ptratio & \textcolor{black}{-0.39} & \textcolor{black}{0.39} & \textcolor{black}{-0.13} & \textcolor{black}{0.18} & \textcolor{black}{-0.36} & \textcolor{black}{0.26} & \textcolor{black}{-0.23} & \textcolor{black}{0.47} & \textcolor{black}{0.47} & \textcolor{blue}{1} & \textcolor{black}{0.38} & \textcolor{black}{-0.52} & \textcolor{black}{0.25}\\
+\hline
+lstat & \textcolor{black}{-0.43} & \textcolor{black}{0.61} & \textcolor{black}{-0.05} & \textcolor{black}{0.6} & \textcolor{black}{-0.63} & \textcolor{black}{0.61} & \textcolor{black}{-0.51} & \textcolor{black}{0.5} & \textcolor{black}{0.56} & \textcolor{black}{0.38} & \textcolor{blue}{1} & \textcolor{blue}{-0.74} & \textcolor{black}{0.47}\\
+\hline
+medv & \textcolor{black}{0.38} & \textcolor{black}{-0.5} & \textcolor{black}{0.16} & \textcolor{black}{-0.43} & \textcolor{blue}{0.71} & \textcolor{black}{-0.38} & \textcolor{black}{0.26} & \textcolor{black}{-0.4} & \textcolor{black}{-0.49} & \textcolor{black}{-0.52} & \textcolor{blue}{-0.74} & \textcolor{blue}{1} & \textcolor{black}{-0.27}\\
+\hline
+target & \textcolor{black}{-0.43} & \textcolor{black}{0.6} & \textcolor{black}{0.08} & \textcolor{blue}{0.73} & \textcolor{black}{-0.15} & \textcolor{black}{0.63} & \textcolor{black}{-0.62} & \textcolor{black}{0.63} & \textcolor{black}{0.61} & \textcolor{black}{0.25} & \textcolor{black}{0.47} & \textcolor{black}{-0.27} & \textcolor{blue}{1}\\
+\hline
+\end{tabular}
+\end{table}
+
+\hypertarget{scatterplot-matrix}{%
+\paragraph{Scatterplot Matrix}\label{scatterplot-matrix}}
+
+\includegraphics{OMEROZEREN_HMW_3_files/figure-latex/unnamed-chunk-4-1.pdf}
+
+\begin{itemize}
+\tightlist
+\item
+  Reviewing the scatterplot matrix shows several pairs with possible
+  relationships. Two most prominent are \texttt{nox}/\texttt{dis} and
+  \texttt{lstat}/\texttt{medv}.
+\item
+  \texttt{rm} and \texttt{medv} may have a linear relationship as well.
+\item
+  \texttt{rad} and \texttt{tax} have a very prominent outlier. Further
+  inspection of data shows that all observations with \texttt{rad} value
+  of 24 have a \texttt{tax} value of 666, so the outlier is actually
+  multiple observations mapped to the same spot. Interestingly, all of
+  these obervations also have a \texttt{target} value of 1. This
+  combination may warrant closer inspection.
+\end{itemize}
+
+Above data analysis treats \texttt{rad} and \texttt{chas} as numeric
+variables; however, treating them as categorical variables may better
+reflect the nature of those variables, so for modelling they will be
+converted to factors.
+
+\hypertarget{modelling}{%
+\subsection{Modelling}\label{modelling}}
+
+The dependent variable, \texttt{target}, is binary. For this project it
+is assumed that observations are independent of each other as there is
+no reason to believe otherwise.
+
+As the first step, in order to test and compare performance of various
+models, data was split into training (75\%) and testing (25\%) sets. The
+training set includes 350 randomly chosen observations and the testing
+set includes 116 remaining observations.
+
+\hypertarget{model-1-variables-with-high-correlation-to-target-variable}{%
+\paragraph{Model 1: Variables with High Correlation to Target
+Variable}\label{model-1-variables-with-high-correlation-to-target-variable}}
+
+The first model includes 5 variables with the highest correlation
+coefficients when compared agains the target variable. This simple model
+will allow for testing methodology as well as corresponding R code.
+
+\begin{verbatim}
+## 
+## Call:
+## glm(formula = target ~ nox + age + dis + rad + tax, family = binomial(link = "logit"), 
+##     data = crimeTRAIN)
+## 
+## Deviance Residuals: 
+##     Min       1Q   Median       3Q      Max  
+## -3.0293  -0.1272   0.0000   0.0001   3.2135  
+## 
+## Coefficients:
+##               Estimate Std. Error z value Pr(>|z|)    
+## (Intercept) -4.870e+01  3.499e+03  -0.014    0.989    
+## nox          6.026e+01  1.220e+01   4.939 7.84e-07 ***
+## age          2.782e-03  1.372e-02   0.203    0.839    
+## dis          7.224e-03  2.592e-01   0.028    0.978    
+## rad2        -2.036e+00  4.801e+03   0.000    1.000    
+## rad3         2.044e+01  3.499e+03   0.006    0.995    
+## rad4         2.262e+01  3.499e+03   0.006    0.995    
+## rad5         2.018e+01  3.499e+03   0.006    0.995    
+## rad6         1.846e+01  3.499e+03   0.005    0.996    
+## rad7         2.294e+01  3.499e+03   0.007    0.995    
+## rad8         2.544e+01  3.499e+03   0.007    0.994    
+## rad24        4.349e+01  3.773e+03   0.012    0.991    
+## tax         -1.656e-02  3.910e-03  -4.235 2.28e-05 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## (Dispersion parameter for binomial family taken to be 1)
+## 
+##     Null deviance: 485.100  on 349  degrees of freedom
+## Residual deviance:  97.662  on 337  degrees of freedom
+## AIC: 123.66
+## 
+## Number of Fisher Scoring iterations: 19
+\end{verbatim}
+
+\begin{verbatim}
+##           Reference
+## Prediction  0  1
+##          0 56  3
+##          1  4 53
+\end{verbatim}
+
+\begin{verbatim}
+## fitting null model for pseudo-r2
+\end{verbatim}
+
+Model summary and confusion matrix of running this model against test
+data are above. The accuracy rate (0.9396552) is very good and the
+McFadden R\^{}2 value (0.7986761) is also high. AIC value is 123.66.
+Additionally, consider the ROC curve for this model.
+
+\includegraphics{OMEROZEREN_HMW_3_files/figure-latex/unnamed-chunk-8-1.pdf}
+
+Area under the curve is 0.9815641.
+
+\hypertarget{model-2-all-variables}{%
+\paragraph{Model 2: All Variables}\label{model-2-all-variables}}
+
+The second model includes all 12 available independent variables.
+
+\begin{verbatim}
+## 
+## Call:
+## glm(formula = target ~ ., family = binomial(link = "logit"), 
+##     data = crimeTRAIN)
+## 
+## Deviance Residuals: 
+##     Min       1Q   Median       3Q      Max  
+## -2.6329  -0.0803   0.0000   0.0001   4.1121  
+## 
+## Coefficients:
+##               Estimate Std. Error z value Pr(>|z|)    
+## (Intercept) -5.294e+01  3.400e+03  -0.016   0.9876    
+## zn          -1.444e-01  7.044e-02  -2.051   0.0403 *  
+## indus       -1.363e-01  1.221e-01  -1.116   0.2644    
+## chas1       -1.543e+00  1.480e+00  -1.042   0.2973    
+## nox          6.142e+01  1.452e+01   4.230 2.34e-05 ***
+## rm          -1.867e-01  1.262e+00  -0.148   0.8824    
+## age          1.133e-02  1.837e-02   0.617   0.5372    
+## dis          3.650e-01  2.982e-01   1.224   0.2210    
+## rad2        -4.535e-01  4.821e+03   0.000   0.9999    
+## rad3         1.738e+01  3.400e+03   0.005   0.9959    
+## rad4         2.143e+01  3.400e+03   0.006   0.9950    
+## rad5         1.873e+01  3.400e+03   0.006   0.9956    
+## rad6         1.647e+01  3.400e+03   0.005   0.9961    
+## rad7         2.451e+01  3.400e+03   0.007   0.9942    
+## rad8         2.464e+01  3.400e+03   0.007   0.9942    
+## rad24        4.091e+01  3.695e+03   0.011   0.9912    
+## tax         -9.692e-03  6.242e-03  -1.553   0.1205    
+## ptratio     -1.060e-02  2.141e-01  -0.050   0.9605    
+## lstat        7.859e-02  7.283e-02   1.079   0.2806    
+## medv         1.320e-01  1.157e-01   1.141   0.2540    
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## (Dispersion parameter for binomial family taken to be 1)
+## 
+##     Null deviance: 485.100  on 349  degrees of freedom
+## Residual deviance:  88.097  on 330  degrees of freedom
+## AIC: 128.1
+## 
+## Number of Fisher Scoring iterations: 19
+\end{verbatim}
+
+\begin{verbatim}
+##           Reference
+## Prediction  0  1
+##          0 58  1
+##          1  5 52
+\end{verbatim}
+
+\begin{verbatim}
+## fitting null model for pseudo-r2
+\end{verbatim}
+
+Model summary and confusion matrix of running this model against test
+data are above. The accuracy rate (0.9482759) is very good and the
+McFadden R\^{}2 value (0.8183936) is also high. AIC value is 128.1.
+Additionally, consider the ROC curve for this model.
+
+\includegraphics{OMEROZEREN_HMW_3_files/figure-latex/unnamed-chunk-10-1.pdf}
+
+Area under the curve is 0.9854297.
+
+Comparing to the first model AIC has slightly increased (worse), but
+accuracy, McFadden R\^{}2 and AUC all also slightly increased (better).
+
+\hypertarget{model-3-stepaic-method}{%
+\paragraph{\texorpdfstring{Model 3: \emph{StepAIC}
+Method}{Model 3: StepAIC Method}}\label{model-3-stepaic-method}}
+
+The third model starts with all 12 available independent variables, but
+then drops them one by one using the stepwise algorithm.
+
+\begin{verbatim}
+## 
+## Call:
+## glm(formula = target ~ zn + nox + rad + tax, family = binomial(link = "logit"), 
+##     data = crimeTRAIN)
+## 
+## Deviance Residuals: 
+##      Min        1Q    Median        3Q       Max  
+## -2.94915  -0.13567   0.00000   0.00011   3.15933  
+## 
+## Coefficients:
+##               Estimate Std. Error z value Pr(>|z|)    
+## (Intercept) -4.648e+01  3.400e+03  -0.014    0.989    
+## zn          -6.837e-02  4.509e-02  -1.516    0.129    
+## nox          5.669e+01  9.605e+00   5.902 3.59e-09 ***
+## rad2        -2.026e+00  4.728e+03   0.000    1.000    
+## rad3         2.013e+01  3.400e+03   0.006    0.995    
+## rad4         2.244e+01  3.400e+03   0.007    0.995    
+## rad5         2.015e+01  3.400e+03   0.006    0.995    
+## rad6         1.830e+01  3.400e+03   0.005    0.996    
+## rad7         2.465e+01  3.400e+03   0.007    0.994    
+## rad8         2.573e+01  3.400e+03   0.008    0.994    
+## rad24        4.309e+01  3.684e+03   0.012    0.991    
+## tax         -1.602e-02  3.747e-03  -4.277 1.90e-05 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## (Dispersion parameter for binomial family taken to be 1)
+## 
+##     Null deviance: 485.100  on 349  degrees of freedom
+## Residual deviance:  94.991  on 338  degrees of freedom
+## AIC: 118.99
+## 
+## Number of Fisher Scoring iterations: 19
+\end{verbatim}
+
+\begin{verbatim}
+##           Reference
+## Prediction  0  1
+##          0 56  3
+##          1  4 53
+\end{verbatim}
+
+\begin{verbatim}
+## fitting null model for pseudo-r2
+\end{verbatim}
+
+Model summary and confusion matrix of running this model against test
+data are above. The accuracy rate (0.9396552) is very good and the
+McFadden R\^{}2 value (0.8041826) is also high. AIC value is 118.99.
+Additionally, consider the ROC curve for this model.
+
+\includegraphics{OMEROZEREN_HMW_3_files/figure-latex/unnamed-chunk-12-1.pdf}
+
+Area under the curve is 0.9849836.
+
+The third model has the best (lowest) AIC value (better). Accuracy is
+the same as for the first model (and slightly lower than the second
+model). AUC is lower, but very close to the AUC value for the second
+model. Finally, McFadden R\^{}2 falls between the first and second
+models, but the change is also very small.
+
+\hypertarget{additional-models}{%
+\paragraph{Additional Models}\label{additional-models}}
+
+Basic models produced very efficient results. Several other models were
+attempted, but they did not produce significant improvements and
+therefore simplier, easier to interpret basic models were preferred.
+Other models included variable transformations and variable
+interactions. Since this project does not deals with critical and
+sensitive data with high cost of errors, such as medical or national
+security projects may, the accuracy of the basic models is deemed
+acceptable.
+
+\hypertarget{model-selection}{%
+\subsection{Model Selection}\label{model-selection}}
+
+All 3 models generated good overall results, but the third model
+(\emph{StepAIC} model) is chosen for its simplicity. It is important to
+note that even though general parameters between models are close, one
+may be preferred over the other based on application. For example, the
+second and third models have similar number of errors (6 and 7);
+however, the second model has more Type II/False Negative errors and
+less Type I/False Positive errors than the third model. This difference
+in sensitivity and specificity may be important for some applications.
+
+Additionally, one small adjustment to the model is to convert
+\texttt{nox} from parts per 10 million to parts per 100,000. This will
+help interpret the model coefficients.
+
+\begin{verbatim}
+## 
+## Call:
+## glm(formula = target ~ zn + I(nox * 100) + rad + tax, family = binomial(link = "logit"), 
+##     data = crime)
+## 
+## Deviance Residuals: 
+##     Min       1Q   Median       3Q      Max  
+## -2.9406  -0.1155   0.0000   0.0001   3.3805  
+## 
+## Coefficients:
+##                Estimate Std. Error z value Pr(>|z|)    
+## (Intercept)  -4.640e+01  3.102e+03  -0.015   0.9881    
+## zn           -8.837e-02  4.308e-02  -2.051   0.0402 *  
+## I(nox * 100)  5.643e-01  8.038e-02   7.021 2.21e-12 ***
+## rad2         -1.885e+00  4.225e+03   0.000   0.9996    
+## rad3          1.987e+01  3.102e+03   0.006   0.9949    
+## rad4          2.255e+01  3.102e+03   0.007   0.9942    
+## rad5          2.014e+01  3.102e+03   0.006   0.9948    
+## rad6          1.865e+01  3.102e+03   0.006   0.9952    
+## rad7          2.631e+01  3.102e+03   0.008   0.9932    
+## rad8          2.599e+01  3.102e+03   0.008   0.9933    
+## rad24         4.410e+01  3.322e+03   0.013   0.9894    
+## tax          -1.614e-02  3.094e-03  -5.218 1.81e-07 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## (Dispersion parameter for binomial family taken to be 1)
+## 
+##     Null deviance: 645.88  on 465  degrees of freedom
+## Residual deviance: 128.29  on 454  degrees of freedom
+## AIC: 152.29
+## 
+## Number of Fisher Scoring iterations: 19
+\end{verbatim}
+
+\hypertarget{model-performance-and-description}{%
+\subsection{Model Performance and
+Description}\label{model-performance-and-description}}
+
+\hypertarget{k-fold-cross-validation}{%
+\paragraph{K-Fold Cross Validation}\label{k-fold-cross-validation}}
+
+To assess the performance of selected model, below are results of
+10-fold cross-validation. The model performs as expected.
+
+\begin{verbatim}
+## Confusion Matrix and Statistics
+## 
+##           Reference
+## Prediction  0  1
+##          0 56  3
+##          1  4 53
+##                                           
+##                Accuracy : 0.9397          
+##                  95% CI : (0.8796, 0.9754)
+##     No Information Rate : 0.5172          
+##     P-Value [Acc > NIR] : <2e-16          
+##                                           
+##                   Kappa : 0.8792          
+##                                           
+##  Mcnemar's Test P-Value : 1               
+##                                           
+##             Sensitivity : 0.9333          
+##             Specificity : 0.9464          
+##          Pos Pred Value : 0.9492          
+##          Neg Pred Value : 0.9298          
+##              Prevalence : 0.5172          
+##          Detection Rate : 0.4828          
+##    Detection Prevalence : 0.5086          
+##       Balanced Accuracy : 0.9399          
+##                                           
+##        'Positive' Class : 0               
+## 
+\end{verbatim}
+
+\hypertarget{deviance}{%
+\paragraph{Deviance}\label{deviance}}
+
+Similarly, the deviance table below demonstrated that each variable
+significantly contributes to the drop in deviance difference.
+
+\begin{verbatim}
+## Analysis of Deviance Table
+## 
+## Model: binomial, link: logit
+## 
+## Response: target
+## 
+## Terms added sequentially (first to last)
+## 
+## 
+##              Df Deviance Resid. Df Resid. Dev  Pr(>Chi)    
+## NULL                           465     645.88              
+## zn            1  127.411       464     518.46 < 2.2e-16 ***
+## I(nox * 100)  1  230.177       463     288.29 < 2.2e-16 ***
+## rad           8  127.537       455     160.75 < 2.2e-16 ***
+## tax           1   32.462       454     128.29 1.216e-08 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+\end{verbatim}
+
+\hypertarget{variance-inflation-factor}{%
+\paragraph{Variance Inflation Factor}\label{variance-inflation-factor}}
+
+\begin{verbatim}
+##                  GVIF Df GVIF^(1/(2*Df))
+## zn           2.866869  1        1.693183
+## I(nox * 100) 2.953331  1        1.718526
+## rad          5.114539  8        1.107390
+## tax          2.154850  1        1.467941
+\end{verbatim}
+
+VIFs are reasonable, so that we can assume that there is not much
+multicollinearity between variables.
+
+\hypertarget{histogram-of-predicted-probabilities}{%
+\paragraph{Histogram of Predicted
+Probabilities}\label{histogram-of-predicted-probabilities}}
+
+Distribution of predicted probabilities generated by running all
+training data through the model shows that the model is predicting 0 or
+1 with high probability. There are few instances where probability shows
+less certainty in the selected outcome.
+
+\includegraphics{OMEROZEREN_HMW_3_files/figure-latex/unnamed-chunk-17-1.pdf}
+
+\hypertarget{coefficientsoddsvariable-contribution}{%
+\paragraph{Coefficients/Odds/Variable
+Contribution}\label{coefficientsoddsvariable-contribution}}
+
+\begin{verbatim}
+##              exp(model$coefficients)
+## (Intercept)             7.069802e-21
+## zn                      9.154199e-01
+## I(nox * 100)            1.758185e+00
+## rad2                    1.517949e-01
+## rad3                    4.269957e+08
+## rad4                    6.223348e+09
+## rad5                    5.589707e+08
+## rad6                    1.256121e+08
+## rad7                    2.665850e+11
+## rad8                    1.932043e+11
+## rad24                   1.419253e+19
+## tax                     9.839877e-01
+\end{verbatim}
+
+For \texttt{zn}, the coefficient is negative and the odds of having an
+above median crime rate is 0.9154. Higher \texttt{zn}, meaning more
+large lots, is less likely to increase the crime rate.
+
+For \texttt{nox}, the coefficient is positive and the odds is 1.75, so
+there is a 75\% increase in odds with higher \texttt{nox} values. Higher
+levels of nitrogen oxide indicate more congested neighborhoods. It is
+possible to theorize that more urban, congested areas are more likely to
+have higher crime than suburban areas.
+
+For \texttt{tax}, the coefficient is negative and the odds is 0.984.
+Decrease in crime rate is more likely with the increase of property-tax
+rates.
+
+Finally, for \texttt{rad} all coefficients are positive except for
+\texttt{rad} value of 2. There is no explicit explanation for values of
+\texttt{rad} variable. Assuming that low values mean higher
+accessibility to radial highways, it is possible to theorize that living
+close, but not too close to highways is more likely to decrease the
+crime rate, but then moving away from highways is more likely to
+increase it. Odds are difficult to intepret possibly because of outliers
+(most likely \texttt{rad} value of 24).
+
+\hypertarget{evaluation-data-set}{%
+\subsection{Evaluation Data Set}\label{evaluation-data-set}}
+
+\begin{verbatim}
+##    zn indus chas   nox    rm   age    dis rad tax ptratio lstat medv
+## 1   0  7.07    0 0.469 7.185  61.1 4.9671   2 242    17.8  4.03 34.7
+## 2   0  8.14    0 0.538 6.096  84.5 4.4619   4 307    21.0 10.26 18.2
+## 3   0  8.14    0 0.538 6.495  94.4 4.4547   4 307    21.0 12.80 18.4
+## 4   0  8.14    0 0.538 5.950  82.0 3.9900   4 307    21.0 27.71 13.2
+## 5   0  5.96    0 0.499 5.850  41.5 3.9342   5 279    19.2  8.77 21.0
+## 6  25  5.13    0 0.453 5.741  66.2 7.2254   8 284    19.7 13.15 18.7
+## 7  25  5.13    0 0.453 5.966  93.4 6.8185   8 284    19.7 14.44 16.0
+## 8   0  4.49    0 0.449 6.630  56.1 4.4377   3 247    18.5  6.53 26.6
+## 9   0  4.49    0 0.449 6.121  56.8 3.7476   3 247    18.5  8.44 22.2
+## 10  0  2.89    0 0.445 6.163  69.6 3.4952   2 276    18.0 11.34 21.4
+## 11  0 25.65    0 0.581 5.856  97.0 1.9444   2 188    19.1 25.41 17.3
+## 12  0 25.65    0 0.581 5.613  95.6 1.7572   2 188    19.1 27.26 15.7
+## 13  0 21.89    0 0.624 5.637  94.7 1.9799   4 437    21.2 18.34 14.3
+## 14  0 19.58    0 0.605 6.101  93.0 2.2834   5 403    14.7  9.81 25.0
+## 15  0 19.58    0 0.605 5.880  97.3 2.3887   5 403    14.7 12.03 19.1
+## 16  0 10.59    1 0.489 5.960  92.1 3.8771   4 277    18.6 17.27 21.7
+## 17  0  6.20    0 0.504 6.552  21.4 3.3751   8 307    17.4  3.76 31.5
+## 18  0  6.20    0 0.507 8.247  70.4 3.6519   8 307    17.4  3.95 48.3
+## 19 22  5.86    0 0.431 6.957   6.8 8.9067   7 330    19.1  3.53 29.6
+## 20 90  2.97    0 0.400 7.088  20.8 7.3073   1 285    15.3  7.85 32.2
+## 21 80  1.76    0 0.385 6.230  31.5 9.0892   1 241    18.2 12.93 20.1
+## 22 33  2.18    0 0.472 6.616  58.1 3.3700   7 222    18.4  8.93 28.4
+## 23  0  9.90    0 0.544 6.122  52.8 2.6403   4 304    18.4  5.98 22.1
+## 24  0  7.38    0 0.493 6.415  40.1 4.7211   5 287    19.6  6.12 25.0
+## 25  0  7.38    0 0.493 6.312  28.9 5.4159   5 287    19.6  6.15 23.0
+## 26  0  5.19    0 0.515 5.895  59.6 5.6150   5 224    20.2 10.56 18.5
+## 27 80  2.01    0 0.435 6.635  29.7 8.3440   4 280    17.0  5.99 24.5
+## 28  0 18.10    0 0.718 3.561  87.9 1.6132  24 666    20.2  7.12 27.5
+## 29  0 18.10    1 0.631 7.016  97.5 1.2024  24 666    20.2  2.96 50.0
+## 30  0 18.10    0 0.584 6.348  86.1 2.0527  24 666    20.2 17.64 14.5
+## 31  0 18.10    0 0.740 5.935  87.9 1.8206  24 666    20.2 34.02  8.4
+## 32  0 18.10    0 0.740 5.627  93.9 1.8172  24 666    20.2 22.88 12.8
+## 33  0 18.10    0 0.740 5.818  92.4 1.8662  24 666    20.2 22.11 10.5
+## 34  0 18.10    0 0.740 6.219 100.0 2.0048  24 666    20.2 16.59 18.4
+## 35  0 18.10    0 0.740 5.854  96.6 1.8956  24 666    20.2 23.79 10.8
+## 36  0 18.10    0 0.713 6.525  86.5 2.4358  24 666    20.2 18.13 14.1
+## 37  0 18.10    0 0.713 6.376  88.4 2.5671  24 666    20.2 14.65 17.7
+## 38  0 18.10    0 0.655 6.209  65.4 2.9634  24 666    20.2 13.22 21.4
+## 39  0  9.69    0 0.585 5.794  70.6 2.8927   6 391    19.2 14.10 18.3
+## 40  0 11.93    0 0.573 6.976  91.0 2.1675   1 273    21.0  5.64 23.9
+##      prob predict
+## 1  0.0000       0
+## 2  0.8258       1
+## 3  0.8258       1
+## 4  0.8258       1
+## 5  0.0690       0
+## 6  0.1620       0
+## 7  0.1620       0
+## 8  0.0056       0
+## 9  0.0056       0
+## 10 0.0000       0
+## 11 0.0000       0
+## 12 0.0000       0
+## 13 0.9867       1
+## 14 0.7985       1
+## 15 0.7985       1
+## 16 0.3263       0
+## 17 0.9558       1
+## 18 0.9624       1
+## 19 0.0457       0
+## 20 0.0000       0
+## 21 0.0000       0
+## 22 0.5112       1
+## 23 0.8747       1
+## 24 0.0443       0
+## 25 0.0443       0
+## 26 0.3074       0
+## 27 0.0000       0
+## 28 1.0000       1
+## 29 1.0000       1
+## 30 1.0000       1
+## 31 1.0000       1
+## 32 1.0000       1
+## 33 1.0000       1
+## 34 1.0000       1
+## 35 1.0000       1
+## 36 1.0000       1
+## 37 1.0000       1
+## 38 1.0000       1
+## 39 0.2591       0
+## 40 0.0000       0
+\end{verbatim}
+
+Split between predicted outcomes is illustrated by tables below.
+
+\begin{verbatim}
+## 
+##  0  1 
+## 19 21
+\end{verbatim}
+
+\begin{verbatim}
+## 
+##     0     1 
+## 0.475 0.525
+\end{verbatim}
+
+\hypertarget{appendix-b-r-script}{%
+\subsection{APPENDIX B: R Script}\label{appendix-b-r-script}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Required libraries}
+\KeywordTok{library}\NormalTok{(knitr)}
+\KeywordTok{library}\NormalTok{(kableExtra)}
+\KeywordTok{library}\NormalTok{(ggplot2)}
+\KeywordTok{library}\NormalTok{(gridExtra)}
+\KeywordTok{library}\NormalTok{(dplyr)}
+\KeywordTok{library}\NormalTok{(caTools)}
+\KeywordTok{library}\NormalTok{(pscl)}
+\KeywordTok{library}\NormalTok{(ROCR)}
+\KeywordTok{library}\NormalTok{(MASS)}
+\KeywordTok{library}\NormalTok{(caret)}
+\KeywordTok{library}\NormalTok{(car)}
+\CommentTok{# Import data}
+\NormalTok{crime <-}\StringTok{ }\KeywordTok{read.csv}\NormalTok{(}\KeywordTok{url}\NormalTok{(}\KeywordTok{paste0}\NormalTok{(}\StringTok{"https://raw.githubusercontent.com/omerozeren/DATA621/master/crime-training-data_modified.csv"}\NormalTok{)))}
+\CommentTok{# Basic statistic}
+\KeywordTok{nrow}\NormalTok{(crime); }\KeywordTok{ncol}\NormalTok{(crime)}
+\KeywordTok{summary}\NormalTok{(crime)}
+\CommentTok{# Summary table}
+\NormalTok{sumCrime =}\StringTok{ }\KeywordTok{data.frame}\NormalTok{(}\DataTypeTok{Variable =} \KeywordTok{character}\NormalTok{(),}
+                      \DataTypeTok{Min =} \KeywordTok{integer}\NormalTok{(),}
+                      \DataTypeTok{Median =} \KeywordTok{integer}\NormalTok{(),}
+                      \DataTypeTok{Mean =} \KeywordTok{double}\NormalTok{(),}
+                      \DataTypeTok{SD =} \KeywordTok{double}\NormalTok{(),}
+                      \DataTypeTok{Max =} \KeywordTok{integer}\NormalTok{(),}
+                      \DataTypeTok{Num_NAs =} \KeywordTok{integer}\NormalTok{(),}
+                      \DataTypeTok{Num_Zeros =} \KeywordTok{integer}\NormalTok{())}
+\ControlFlowTok{for}\NormalTok{ (i }\ControlFlowTok{in} \DecValTok{1}\OperatorTok{:}\DecValTok{13}\NormalTok{) \{}
+\NormalTok{  sumCrime <-}\StringTok{ }\KeywordTok{rbind}\NormalTok{(sumCrime, }\KeywordTok{data.frame}\NormalTok{(}\DataTypeTok{Variable =} \KeywordTok{colnames}\NormalTok{(crime)[i],}
+                                         \DataTypeTok{Min =} \KeywordTok{min}\NormalTok{(crime[,i], }\DataTypeTok{na.rm=}\OtherTok{TRUE}\NormalTok{),}
+                                         \DataTypeTok{Median =} \KeywordTok{median}\NormalTok{(crime[,i], }\DataTypeTok{na.rm=}\OtherTok{TRUE}\NormalTok{),}
+                                         \DataTypeTok{Mean =} \KeywordTok{mean}\NormalTok{(crime[,i], }\DataTypeTok{na.rm=}\OtherTok{TRUE}\NormalTok{),}
+                                         \DataTypeTok{SD =} \KeywordTok{sd}\NormalTok{(crime[,i], }\DataTypeTok{na.rm=}\OtherTok{TRUE}\NormalTok{),}
+                                         \DataTypeTok{Max =} \KeywordTok{max}\NormalTok{(crime[,i], }\DataTypeTok{na.rm=}\OtherTok{TRUE}\NormalTok{),}
+                                         \DataTypeTok{Num_NAs =} \KeywordTok{sum}\NormalTok{(}\KeywordTok{is.na}\NormalTok{(crime[,i])),}
+                                         \DataTypeTok{Num_Zeros =} \KeywordTok{length}\NormalTok{(}\KeywordTok{which}\NormalTok{(crime[,i]}\OperatorTok{==}\DecValTok{0}\NormalTok{)))}
+\NormalTok{  )}
+\NormalTok{\}}
+\KeywordTok{colnames}\NormalTok{(sumCrime) <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{""}\NormalTok{, }\StringTok{"Min"}\NormalTok{, }\StringTok{"Median"}\NormalTok{, }\StringTok{"Mean"}\NormalTok{, }\StringTok{"SD"}\NormalTok{, }\StringTok{"Max"}\NormalTok{, }
+                        \StringTok{"Num of NAs"}\NormalTok{, }\StringTok{"Num of Zeros"}\NormalTok{)}
+\NormalTok{sumCrime}
+\CommentTok{# Proportion of target variable}
+\KeywordTok{table}\NormalTok{(crime}\OperatorTok{$}\NormalTok{target)}
+\KeywordTok{table}\NormalTok{(crime}\OperatorTok{$}\NormalTok{target)}\OperatorTok{/}\KeywordTok{sum}\NormalTok{(}\KeywordTok{table}\NormalTok{(crime}\OperatorTok{$}\NormalTok{target))}
+\CommentTok{# Exploratory plots (repeated for each variable)}
+\KeywordTok{kable}\NormalTok{(sumCrime[sumCrime[,}\DecValTok{1}\NormalTok{]}\OperatorTok{==}\StringTok{"zn"}\NormalTok{,}\DecValTok{2}\OperatorTok{:}\DecValTok{8}\NormalTok{], }\DataTypeTok{row.names=}\OtherTok{FALSE}\NormalTok{)}
+\CommentTok{# Get descriptive plots:}
+\CommentTok{# Variables: zn indus chas nox rm age dis rad tax ptratio lstat medv target}
+\NormalTok{v <-}\StringTok{ "dis"} \CommentTok{# Variable to view}
+\NormalTok{pd <-}\StringTok{ }\KeywordTok{as.data.frame}\NormalTok{(}\KeywordTok{cbind}\NormalTok{(crime[, v], crime}\OperatorTok{$}\NormalTok{target))}
+\KeywordTok{colnames}\NormalTok{(pd) <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"X"}\NormalTok{, }\StringTok{"Y"}\NormalTok{)}
+\CommentTok{# Boxplot}
+\NormalTok{bp <-}\StringTok{ }\KeywordTok{ggplot}\NormalTok{(pd, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =} \DecValTok{1}\NormalTok{, }\DataTypeTok{y =}\NormalTok{ X)) }\OperatorTok{+}\StringTok{ }
+\StringTok{  }\KeywordTok{stat_boxplot}\NormalTok{(}\DataTypeTok{geom =}\StringTok{'errorbar'}\NormalTok{) }\OperatorTok{+}\StringTok{ }\KeywordTok{geom_boxplot}\NormalTok{() }\OperatorTok{+}\StringTok{ }
+\StringTok{  }\KeywordTok{xlab}\NormalTok{(}\StringTok{"Boxplot"}\NormalTok{) }\OperatorTok{+}\StringTok{ }\KeywordTok{ylab}\NormalTok{(}\StringTok{""}\NormalTok{) }\OperatorTok{+}\StringTok{ }
+\StringTok{  }\KeywordTok{theme}\NormalTok{(}\DataTypeTok{axis.text.x=}\KeywordTok{element_blank}\NormalTok{(), }\DataTypeTok{axis.ticks.x=}\KeywordTok{element_blank}\NormalTok{())}
+\CommentTok{# Density plot}
+\NormalTok{hp <-}\StringTok{ }\KeywordTok{ggplot}\NormalTok{(pd, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ X)) }\OperatorTok{+}\StringTok{ }
+\StringTok{  }\KeywordTok{geom_histogram}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{y=}\NormalTok{..density..), }\DataTypeTok{colour=}\StringTok{"black"}\NormalTok{, }\DataTypeTok{fill=}\StringTok{"white"}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_density}\NormalTok{(}\DataTypeTok{alpha=}\NormalTok{.}\DecValTok{2}\NormalTok{, }\DataTypeTok{fill=}\StringTok{"#FF6666"}\NormalTok{) }\OperatorTok{+}\StringTok{ }
+\StringTok{  }\KeywordTok{ylab}\NormalTok{(}\StringTok{""}\NormalTok{) }\OperatorTok{+}\StringTok{ }\KeywordTok{xlab}\NormalTok{(}\StringTok{"Density Plot with Mean"}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_vline}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{xintercept=}\KeywordTok{mean}\NormalTok{(X, }\DataTypeTok{na.rm=}\OtherTok{TRUE}\NormalTok{)), }
+             \DataTypeTok{color=}\StringTok{"red"}\NormalTok{, }\DataTypeTok{linetype=}\StringTok{"dashed"}\NormalTok{, }\DataTypeTok{size=}\DecValTok{1}\NormalTok{)}
+\CommentTok{# Scatterplot}
+\NormalTok{sp <-}\StringTok{ }\KeywordTok{ggplot}\NormalTok{(pd, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x=}\NormalTok{X, }\DataTypeTok{y=}\NormalTok{Y)) }\OperatorTok{+}\StringTok{ }
+\StringTok{  }\KeywordTok{geom_point}\NormalTok{() }\OperatorTok{+}\StringTok{   }
+\StringTok{  }\KeywordTok{stat_smooth}\NormalTok{(}\DataTypeTok{method=}\StringTok{"glm"}\NormalTok{, }\DataTypeTok{method.args=}\KeywordTok{list}\NormalTok{(}\DataTypeTok{family=}\StringTok{"binomial"}\NormalTok{), }\DataTypeTok{se=}\OtherTok{FALSE}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{xlab}\NormalTok{(}\StringTok{"Scatterplot with Logistic Regression Line"}\NormalTok{)}
+\KeywordTok{grid.arrange}\NormalTok{(bp, hp, sp, }\DataTypeTok{layout_matrix=}\KeywordTok{rbind}\NormalTok{(}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{2}\NormalTok{,}\DecValTok{2}\NormalTok{),}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{3}\NormalTok{,}\DecValTok{3}\NormalTok{)))}
+\CommentTok{# Correlation matrix}
+\NormalTok{cm <-}\StringTok{ }\KeywordTok{cor}\NormalTok{(crime, }\DataTypeTok{use=}\StringTok{"pairwise.complete.obs"}\NormalTok{)}
+\NormalTok{cm <-}\StringTok{ }\KeywordTok{round}\NormalTok{(cm, }\DecValTok{2}\NormalTok{)}
+\NormalTok{cmout <-}\StringTok{ }\KeywordTok{as.data.frame}\NormalTok{(cm) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{mutate_all}\NormalTok{(}\ControlFlowTok{function}\NormalTok{(x) \{}
+  \KeywordTok{cell_spec}\NormalTok{(x, }\StringTok{"html"}\NormalTok{, }\DataTypeTok{color =} \KeywordTok{ifelse}\NormalTok{(x}\OperatorTok{>}\FloatTok{0.5} \OperatorTok{|}\StringTok{ }\NormalTok{x}\OperatorTok{<}\NormalTok{(}\OperatorTok{-}\FloatTok{0.5}\NormalTok{),}\StringTok{"blue"}\NormalTok{,}\StringTok{"black"}\NormalTok{))}
+\NormalTok{  \})}
+\KeywordTok{rownames}\NormalTok{(cmout) <-}\StringTok{ }\KeywordTok{colnames}\NormalTok{(cmout)}
+\NormalTok{cmout }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{kable}\NormalTok{(}\StringTok{"html"}\NormalTok{, }\DataTypeTok{escape =}\NormalTok{ F, }\DataTypeTok{align =} \StringTok{"c"}\NormalTok{, }\DataTypeTok{row.names =} \OtherTok{TRUE}\NormalTok{) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{kable_styling}\NormalTok{(}\StringTok{"striped"}\NormalTok{, }\DataTypeTok{full_width =}\NormalTok{ F)}
+\KeywordTok{pairs}\NormalTok{(crime)}
+\CommentTok{# Force categorical variables to factors}
+\NormalTok{crime[,}\StringTok{'rad'}\NormalTok{] <-}\StringTok{ }\KeywordTok{as.factor}\NormalTok{(crime[,}\StringTok{'rad'}\NormalTok{])}
+\NormalTok{crime[,}\StringTok{'chas'}\NormalTok{] <-}\StringTok{ }\KeywordTok{as.factor}\NormalTok{(crime[,}\StringTok{'chas'}\NormalTok{])}
+\CommentTok{# Split into train and validation sets}
+\KeywordTok{set.seed}\NormalTok{(}\DecValTok{88}\NormalTok{)}
+\NormalTok{split <-}\StringTok{ }\KeywordTok{sample.split}\NormalTok{(crime}\OperatorTok{$}\NormalTok{target, }\DataTypeTok{SplitRatio =} \FloatTok{0.75}\NormalTok{)}
+\NormalTok{crimeTRAIN <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(crime, split }\OperatorTok{==}\StringTok{ }\OtherTok{TRUE}\NormalTok{)}
+\NormalTok{crimeTEST <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(crime, split }\OperatorTok{==}\StringTok{ }\OtherTok{FALSE}\NormalTok{)}
+\CommentTok{# Model 1}
+\NormalTok{model <-}\StringTok{ }\KeywordTok{glm}\NormalTok{ (target }\OperatorTok{~}\StringTok{ }\NormalTok{., }\DataTypeTok{data =}\NormalTok{ crimeTRAIN, }
+              \DataTypeTok{family =} \KeywordTok{binomial}\NormalTok{(}\DataTypeTok{link=}\StringTok{"logit"}\NormalTok{))}
+\KeywordTok{summary}\NormalTok{(model)}
+\NormalTok{pred <-}\StringTok{ }\KeywordTok{predict}\NormalTok{(model, }\DataTypeTok{newdata=}\KeywordTok{subset}\NormalTok{(crimeTEST, }\DataTypeTok{select=}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\OperatorTok{:}\DecValTok{12}\NormalTok{)), }
+                \DataTypeTok{type=}\StringTok{'response'}\NormalTok{)}
+\NormalTok{cm <-}\StringTok{ }\KeywordTok{confusionMatrix}\NormalTok{(}\KeywordTok{as.factor}\NormalTok{(crimeTEST}\OperatorTok{$}\NormalTok{target), }
+                      \KeywordTok{as.factor}\NormalTok{(}\KeywordTok{ifelse}\NormalTok{(pred }\OperatorTok{>}\StringTok{ }\FloatTok{0.5}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{0}\NormalTok{)))}
+\NormalTok{cm}\OperatorTok{$}\NormalTok{table}
+\NormalTok{cm}\OperatorTok{$}\NormalTok{overall[}\StringTok{'Accuracy'}\NormalTok{]}
+\KeywordTok{pR2}\NormalTok{(model) }\CommentTok{# McFadden R^2}
+\CommentTok{# ROC}
+\NormalTok{pr <-}\StringTok{ }\KeywordTok{prediction}\NormalTok{(pred, crimeTEST}\OperatorTok{$}\NormalTok{target)}
+\NormalTok{prf <-}\StringTok{ }\KeywordTok{performance}\NormalTok{(pr, }\DataTypeTok{measure =} \StringTok{"tpr"}\NormalTok{, }\DataTypeTok{x.measure =} \StringTok{"fpr"}\NormalTok{)}
+\KeywordTok{plot}\NormalTok{(prf, }\DataTypeTok{colorize =} \OtherTok{TRUE}\NormalTok{, }\DataTypeTok{text.adj =} \KeywordTok{c}\NormalTok{(}\OperatorTok{-}\FloatTok{0.2}\NormalTok{,}\FloatTok{1.7}\NormalTok{))}
+\NormalTok{auc <-}\StringTok{ }\KeywordTok{performance}\NormalTok{(pr, }\DataTypeTok{measure =} \StringTok{"auc"}\NormalTok{)}
+\NormalTok{(auc <-}\StringTok{ }\NormalTok{auc}\OperatorTok{@}\NormalTok{y.values[[}\DecValTok{1}\NormalTok{]])}
+\CommentTok{# Model 2}
+\NormalTok{model <-}\StringTok{ }\KeywordTok{glm}\NormalTok{ (target }\OperatorTok{~}\StringTok{ }\NormalTok{., }\DataTypeTok{data =}\NormalTok{ crimeTRAIN, }
+              \DataTypeTok{family =} \KeywordTok{binomial}\NormalTok{(}\DataTypeTok{link=}\StringTok{"logit"}\NormalTok{))}
+\KeywordTok{summary}\NormalTok{(model)}
+\NormalTok{model <-}\StringTok{ }\KeywordTok{glm}\NormalTok{ (target }\OperatorTok{~}\StringTok{ }\NormalTok{.}\OperatorTok{-}\NormalTok{rm, }\DataTypeTok{data =}\NormalTok{ crimeTRAIN, }
+              \DataTypeTok{family =} \KeywordTok{binomial}\NormalTok{(}\DataTypeTok{link=}\StringTok{"logit"}\NormalTok{))}
+\KeywordTok{summary}\NormalTok{(model)}
+\NormalTok{model <-}\StringTok{ }\KeywordTok{glm}\NormalTok{ (target }\OperatorTok{~}\StringTok{ }\NormalTok{.}\OperatorTok{-}\NormalTok{rm}\OperatorTok{-}\NormalTok{chas, }\DataTypeTok{data =}\NormalTok{ crimeTRAIN, }
+              \DataTypeTok{family =} \KeywordTok{binomial}\NormalTok{(}\DataTypeTok{link=}\StringTok{"logit"}\NormalTok{))}
+\KeywordTok{summary}\NormalTok{(model)}
+\NormalTok{model <-}\StringTok{ }\KeywordTok{glm}\NormalTok{ (target }\OperatorTok{~}\StringTok{ }\NormalTok{.}\OperatorTok{-}\NormalTok{rm}\OperatorTok{-}\NormalTok{chas}\OperatorTok{-}\NormalTok{lstat, }\DataTypeTok{data =}\NormalTok{ crimeTRAIN, }
+              \DataTypeTok{family =} \KeywordTok{binomial}\NormalTok{(}\DataTypeTok{link=}\StringTok{"logit"}\NormalTok{))}
+\KeywordTok{summary}\NormalTok{(model)}
+\NormalTok{model <-}\StringTok{ }\KeywordTok{glm}\NormalTok{ (target }\OperatorTok{~}\StringTok{ }\NormalTok{.}\OperatorTok{-}\NormalTok{rm}\OperatorTok{-}\NormalTok{chas}\OperatorTok{-}\NormalTok{lstat}\OperatorTok{-}\NormalTok{indus, }\DataTypeTok{data =}\NormalTok{ crimeTRAIN, }
+              \DataTypeTok{family =} \KeywordTok{binomial}\NormalTok{(}\DataTypeTok{link=}\StringTok{"logit"}\NormalTok{))}
+\KeywordTok{summary}\NormalTok{(model)}
+\NormalTok{model <-}\StringTok{ }\KeywordTok{glm}\NormalTok{ (target }\OperatorTok{~}\StringTok{ }\NormalTok{.}\OperatorTok{-}\NormalTok{rm}\OperatorTok{-}\NormalTok{chas}\OperatorTok{-}\NormalTok{lstat}\OperatorTok{-}\NormalTok{indus}\OperatorTok{-}\NormalTok{zn, }\DataTypeTok{data =}\NormalTok{ crimeTRAIN, }
+              \DataTypeTok{family =} \KeywordTok{binomial}\NormalTok{(}\DataTypeTok{link=}\StringTok{"logit"}\NormalTok{))}
+\KeywordTok{summary}\NormalTok{(model)}
+\NormalTok{pred <-}\StringTok{ }\KeywordTok{predict}\NormalTok{(model, }\DataTypeTok{newdata=}\KeywordTok{subset}\NormalTok{(crimeTEST, }\DataTypeTok{select=}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\OperatorTok{:}\DecValTok{12}\NormalTok{)), }
+                \DataTypeTok{type=}\StringTok{'response'}\NormalTok{)}
+\NormalTok{cm <-}\StringTok{ }\KeywordTok{confusionMatrix}\NormalTok{(}\KeywordTok{as.factor}\NormalTok{(crimeTEST}\OperatorTok{$}\NormalTok{target), }
+                      \KeywordTok{as.factor}\NormalTok{(}\KeywordTok{ifelse}\NormalTok{(pred }\OperatorTok{>}\StringTok{ }\FloatTok{0.5}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{0}\NormalTok{)))}
+\NormalTok{cm}\OperatorTok{$}\NormalTok{table}
+\NormalTok{cm}\OperatorTok{$}\NormalTok{overall[}\StringTok{'Accuracy'}\NormalTok{]}
+\KeywordTok{pR2}\NormalTok{(model) }\CommentTok{# McFadden R^2}
+\CommentTok{# ROC}
+\NormalTok{pr <-}\StringTok{ }\KeywordTok{prediction}\NormalTok{(pred, crimeTEST}\OperatorTok{$}\NormalTok{target)}
+\NormalTok{prf <-}\StringTok{ }\KeywordTok{performance}\NormalTok{(pr, }\DataTypeTok{measure =} \StringTok{"tpr"}\NormalTok{, }\DataTypeTok{x.measure =} \StringTok{"fpr"}\NormalTok{)}
+\KeywordTok{plot}\NormalTok{(prf, }\DataTypeTok{colorize =} \OtherTok{TRUE}\NormalTok{, }\DataTypeTok{text.adj =} \KeywordTok{c}\NormalTok{(}\OperatorTok{-}\FloatTok{0.2}\NormalTok{,}\FloatTok{1.7}\NormalTok{))}
+\NormalTok{auc <-}\StringTok{ }\KeywordTok{performance}\NormalTok{(pr, }\DataTypeTok{measure =} \StringTok{"auc"}\NormalTok{)}
+\NormalTok{(auc <-}\StringTok{ }\NormalTok{auc}\OperatorTok{@}\NormalTok{y.values[[}\DecValTok{1}\NormalTok{]])}
+\CommentTok{# Take out 'tax' because it is highly correlated with 'rad'}
+\NormalTok{model <-}\StringTok{ }\KeywordTok{glm}\NormalTok{ (target }\OperatorTok{~}\StringTok{ }\NormalTok{.}\OperatorTok{-}\NormalTok{tax, }\DataTypeTok{data =}\NormalTok{ crimeTRAIN, }
+              \DataTypeTok{family =} \KeywordTok{binomial}\NormalTok{(}\DataTypeTok{link=}\StringTok{"logit"}\NormalTok{))}
+\KeywordTok{summary}\NormalTok{(model)}
+\NormalTok{pred <-}\StringTok{ }\KeywordTok{predict}\NormalTok{(model, }\DataTypeTok{newdata=}\KeywordTok{subset}\NormalTok{(crimeTEST, }\DataTypeTok{select=}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\OperatorTok{:}\DecValTok{12}\NormalTok{)), }
+                \DataTypeTok{type=}\StringTok{'response'}\NormalTok{)}
+\NormalTok{cm <-}\StringTok{ }\KeywordTok{confusionMatrix}\NormalTok{(}\KeywordTok{as.factor}\NormalTok{(crimeTEST}\OperatorTok{$}\NormalTok{target), }
+                      \KeywordTok{as.factor}\NormalTok{(}\KeywordTok{ifelse}\NormalTok{(pred }\OperatorTok{>}\StringTok{ }\FloatTok{0.5}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{0}\NormalTok{)))}
+\NormalTok{cm}\OperatorTok{$}\NormalTok{table}
+\NormalTok{cm}\OperatorTok{$}\NormalTok{overall[}\StringTok{'Accuracy'}\NormalTok{]}
+\KeywordTok{pR2}\NormalTok{(model) }\CommentTok{# McFadden R^2}
+\CommentTok{# ROC}
+\NormalTok{pr <-}\StringTok{ }\KeywordTok{prediction}\NormalTok{(pred, crimeTEST}\OperatorTok{$}\NormalTok{target)}
+\NormalTok{prf <-}\StringTok{ }\KeywordTok{performance}\NormalTok{(pr, }\DataTypeTok{measure =} \StringTok{"tpr"}\NormalTok{, }\DataTypeTok{x.measure =} \StringTok{"fpr"}\NormalTok{)}
+\KeywordTok{plot}\NormalTok{(prf, }\DataTypeTok{colorize =} \OtherTok{TRUE}\NormalTok{, }\DataTypeTok{text.adj =} \KeywordTok{c}\NormalTok{(}\OperatorTok{-}\FloatTok{0.2}\NormalTok{,}\FloatTok{1.7}\NormalTok{))}
+\NormalTok{auc <-}\StringTok{ }\KeywordTok{performance}\NormalTok{(pr, }\DataTypeTok{measure =} \StringTok{"auc"}\NormalTok{)}
+\NormalTok{(auc <-}\StringTok{ }\NormalTok{auc}\OperatorTok{@}\NormalTok{y.values[[}\DecValTok{1}\NormalTok{]])}
+\CommentTok{# Slight improvement}
+\CommentTok{# Step AIC method}
+\NormalTok{model <-}\StringTok{ }\KeywordTok{glm}\NormalTok{ (target }\OperatorTok{~}\StringTok{ }\NormalTok{., }\DataTypeTok{data =}\NormalTok{ crimeTRAIN, }
+              \DataTypeTok{family =} \KeywordTok{binomial}\NormalTok{(}\DataTypeTok{link=}\StringTok{"logit"}\NormalTok{))}
+\NormalTok{model <-}\StringTok{ }\KeywordTok{stepAIC}\NormalTok{(model, }\DataTypeTok{trace=}\OtherTok{TRUE}\NormalTok{)}
+\KeywordTok{summary}\NormalTok{(model)}
+\NormalTok{pred <-}\StringTok{ }\KeywordTok{predict}\NormalTok{(model, }\DataTypeTok{newdata=}\KeywordTok{subset}\NormalTok{(crimeTEST, }\DataTypeTok{select=}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\OperatorTok{:}\DecValTok{12}\NormalTok{)), }
+                \DataTypeTok{type=}\StringTok{'response'}\NormalTok{)}
+\NormalTok{cm <-}\StringTok{ }\KeywordTok{confusionMatrix}\NormalTok{(}\KeywordTok{as.factor}\NormalTok{(crimeTEST}\OperatorTok{$}\NormalTok{target), }
+                      \KeywordTok{as.factor}\NormalTok{(}\KeywordTok{ifelse}\NormalTok{(pred }\OperatorTok{>}\StringTok{ }\FloatTok{0.5}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{0}\NormalTok{)))}
+\NormalTok{cm}\OperatorTok{$}\NormalTok{table}
+\NormalTok{cm}\OperatorTok{$}\NormalTok{overall[}\StringTok{'Accuracy'}\NormalTok{]}
+\KeywordTok{pR2}\NormalTok{(model) }\CommentTok{# McFadden R^2}
+\CommentTok{# ROC}
+\NormalTok{pr <-}\StringTok{ }\KeywordTok{prediction}\NormalTok{(pred, crimeTEST}\OperatorTok{$}\NormalTok{target)}
+\NormalTok{prf <-}\StringTok{ }\KeywordTok{performance}\NormalTok{(pr, }\DataTypeTok{measure =} \StringTok{"tpr"}\NormalTok{, }\DataTypeTok{x.measure =} \StringTok{"fpr"}\NormalTok{)}
+\KeywordTok{plot}\NormalTok{(prf, }\DataTypeTok{colorize =} \OtherTok{TRUE}\NormalTok{, }\DataTypeTok{text.adj =} \KeywordTok{c}\NormalTok{(}\OperatorTok{-}\FloatTok{0.2}\NormalTok{,}\FloatTok{1.7}\NormalTok{))}
+\NormalTok{auc <-}\StringTok{ }\KeywordTok{performance}\NormalTok{(pr, }\DataTypeTok{measure =} \StringTok{"auc"}\NormalTok{)}
+\NormalTok{(auc <-}\StringTok{ }\NormalTok{auc}\OperatorTok{@}\NormalTok{y.values[[}\DecValTok{1}\NormalTok{]])}
+\CommentTok{# Bad model for testing of code}
+\NormalTok{model <-}\StringTok{ }\KeywordTok{glm}\NormalTok{ (target }\OperatorTok{~}\StringTok{ }\NormalTok{age}\OperatorTok{+}\NormalTok{tax, }\DataTypeTok{data =}\NormalTok{ crimeTRAIN, }
+              \DataTypeTok{family =} \KeywordTok{binomial}\NormalTok{(}\DataTypeTok{link=}\StringTok{"logit"}\NormalTok{))}
+\KeywordTok{summary}\NormalTok{(model)}
+\NormalTok{pred <-}\StringTok{ }\KeywordTok{predict}\NormalTok{(model, }\DataTypeTok{newdata=}\KeywordTok{subset}\NormalTok{(crimeTEST, }\DataTypeTok{select=}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\OperatorTok{:}\DecValTok{12}\NormalTok{)), }
+                \DataTypeTok{type=}\StringTok{'response'}\NormalTok{)}
+\NormalTok{cm <-}\StringTok{ }\KeywordTok{confusionMatrix}\NormalTok{(}\KeywordTok{as.factor}\NormalTok{(crimeTEST}\OperatorTok{$}\NormalTok{target), }
+                      \KeywordTok{as.factor}\NormalTok{(}\KeywordTok{ifelse}\NormalTok{(pred }\OperatorTok{>}\StringTok{ }\FloatTok{0.5}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{0}\NormalTok{)))}
+\NormalTok{cm}\OperatorTok{$}\NormalTok{table}
+\NormalTok{cm}\OperatorTok{$}\NormalTok{overall[}\StringTok{'Accuracy'}\NormalTok{]}
+\KeywordTok{pR2}\NormalTok{(model) }\CommentTok{# McFadden R^2}
+\CommentTok{# ROC}
+\NormalTok{pr <-}\StringTok{ }\KeywordTok{prediction}\NormalTok{(pred, crimeTEST}\OperatorTok{$}\NormalTok{target)}
+\NormalTok{prf <-}\StringTok{ }\KeywordTok{performance}\NormalTok{(pr, }\DataTypeTok{measure =} \StringTok{"tpr"}\NormalTok{, }\DataTypeTok{x.measure =} \StringTok{"fpr"}\NormalTok{)}
+\KeywordTok{plot}\NormalTok{(prf, }\DataTypeTok{colorize =} \OtherTok{TRUE}\NormalTok{, }\DataTypeTok{text.adj =} \KeywordTok{c}\NormalTok{(}\OperatorTok{-}\FloatTok{0.2}\NormalTok{,}\FloatTok{1.7}\NormalTok{))}
+\NormalTok{auc <-}\StringTok{ }\KeywordTok{performance}\NormalTok{(pr, }\DataTypeTok{measure =} \StringTok{"auc"}\NormalTok{)}
+\NormalTok{(auc <-}\StringTok{ }\NormalTok{auc}\OperatorTok{@}\NormalTok{y.values[[}\DecValTok{1}\NormalTok{]])}
+\CommentTok{# Selected model}
+\NormalTok{model <-}\StringTok{ }\KeywordTok{glm}\NormalTok{(target }\OperatorTok{~}\StringTok{ }\NormalTok{zn}\OperatorTok{+}\KeywordTok{I}\NormalTok{(nox}\OperatorTok{*}\DecValTok{100}\NormalTok{)}\OperatorTok{+}\NormalTok{rad}\OperatorTok{+}\NormalTok{tax}\OperatorTok{+}\NormalTok{indus, }\DataTypeTok{data =}\NormalTok{ crimeTRAIN, }
+             \DataTypeTok{family =} \KeywordTok{binomial}\NormalTok{(}\DataTypeTok{link =} \StringTok{"logit"}\NormalTok{))}
+\CommentTok{# K-Fold cross validation}
+\NormalTok{ctrl <-}\StringTok{ }\KeywordTok{trainControl}\NormalTok{(}\DataTypeTok{method =} \StringTok{"repeatedcv"}\NormalTok{, }\DataTypeTok{number =} \DecValTok{10}\NormalTok{, }
+                     \DataTypeTok{savePredictions =} \OtherTok{TRUE}\NormalTok{)}
+\NormalTok{model_fit <-}\StringTok{ }\KeywordTok{train}\NormalTok{(target }\OperatorTok{~}\StringTok{ }\NormalTok{zn }\OperatorTok{+}\StringTok{ }\NormalTok{nox }\OperatorTok{+}\StringTok{ }\NormalTok{rad }\OperatorTok{+}\StringTok{ }\NormalTok{tax,  }
+                   \DataTypeTok{data=}\NormalTok{crimeTRAIN, }\DataTypeTok{method=}\StringTok{"glm"}\NormalTok{, }
+                   \DataTypeTok{family=}\StringTok{"binomial"}\NormalTok{,}
+                   \DataTypeTok{trControl =}\NormalTok{ ctrl, }\DataTypeTok{tuneLength =} \DecValTok{5}\NormalTok{)}
+\NormalTok{pred <-}\StringTok{ }\KeywordTok{predict}\NormalTok{(model_fit, }\DataTypeTok{newdata=}\NormalTok{crimeTEST)}
+\KeywordTok{confusionMatrix}\NormalTok{(}\KeywordTok{as.factor}\NormalTok{(crimeTEST}\OperatorTok{$}\NormalTok{target), }
+                \KeywordTok{as.factor}\NormalTok{(}\KeywordTok{ifelse}\NormalTok{(pred }\OperatorTok{>}\StringTok{ }\FloatTok{0.5}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{0}\NormalTok{)))}
+\CommentTok{# Deviance residuals}
+\KeywordTok{anova}\NormalTok{(model, }\DataTypeTok{test=}\StringTok{"Chisq"}\NormalTok{)}
+\CommentTok{# VIF}
+\KeywordTok{vif}\NormalTok{(model)}
+\CommentTok{# Prediction}
+\NormalTok{eval <-}\StringTok{ }\KeywordTok{read.csv}\NormalTok{(}\StringTok{"https://raw.githubusercontent.com/omerozeren/DATA621/master/crime-evaluation-data_modified.csv"}\NormalTok{)}
+\NormalTok{eval[,}\StringTok{'rad'}\NormalTok{] <-}\StringTok{ }\KeywordTok{as.factor}\NormalTok{(eval[,}\StringTok{'rad'}\NormalTok{])}
+\NormalTok{eval[,}\StringTok{'chas'}\NormalTok{] <-}\StringTok{ }\KeywordTok{as.factor}\NormalTok{(eval[,}\StringTok{'chas'}\NormalTok{])}
+\NormalTok{pred <-}\StringTok{ }\KeywordTok{predict}\NormalTok{(model, }\DataTypeTok{newdata=}\NormalTok{eval, }\DataTypeTok{type=}\StringTok{"response"}\NormalTok{)}
+\NormalTok{eval <-}\StringTok{ }\KeywordTok{cbind}\NormalTok{(eval, }\DataTypeTok{prob=}\KeywordTok{round}\NormalTok{(pred,}\DecValTok{4}\NormalTok{))}
+\NormalTok{eval <-}\StringTok{ }\KeywordTok{cbind}\NormalTok{(eval, }\DataTypeTok{predict=}\KeywordTok{round}\NormalTok{(pred,}\DecValTok{0}\NormalTok{))}
+\KeywordTok{kable}\NormalTok{(eval, }\DataTypeTok{row.names=}\OtherTok{FALSE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+
+\end{document}
