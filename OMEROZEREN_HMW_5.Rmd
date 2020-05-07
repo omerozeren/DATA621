@@ -1,0 +1,34 @@
+---
+title: "HMW 5- Data 621"
+author: "OMER OZEREN"
+output:
+  html_document:
+    highlight: tango
+    theme: journal
+    toc: yes
+    toc_depth: 5
+    toc_float: yes
+  word_document:
+    toc: yes
+    toc_depth: '5'
+  pdf_document:
+    toc: yes
+    toc_depth: '5'
+---
+```{r setup, include=FALSE}
+library(ggplot2)    # plotting
+library(dplyr)      # data manipulation
+library(gridExtra)  # display
+library(knitr)      # display
+library(kableExtra) # display
+library(mice)       # imputation
+library(caTools)    # train-test split
+library(MASS)       # boxcox
+library(Metrics)    # rmse
+library(caret)      # confusion matrix
+library(VIM)        # plotting NAs
+library(ggfortify)  # plotting lm diagnostic
+library(car)        # VIF
+library(pander)
+library(pscl)       # zero-inflated model
+```
