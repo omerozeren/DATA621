@@ -1,0 +1,87 @@
+---
+title: "RealEstate House Pricing Analysis"
+author: |
+  | ** Omer Ozeren**
+  | DATA 621, Master of Science in Data Science,
+  | City University of New York
+output:
+  html_document:
+    df_print: paged
+    toc: no
+  pdf_document:
+    df_print: kable
+    fig_caption: yes
+    toc: no
+---
+```{r options_pkgs, echo=F, warning=F, message=F, results=F}
+knitr::opts_chunk$set(error = F, message = F, # tidy = T,
+                      cache = T, warning = T, 
+                      results = 'hide', # suppress code output
+                      echo = F,         # suppress code
+                      fig.show = 'hide' # suppress plots
+                      )
+library(RCurl)
+library(knitr)
+library(knitcitations)
+library(pander)
+```
+
+# Abstract
+
+Buying or selling a house is one of the important events faced by many in their lifetime. As such understanding what factors drive sale prices is both interesting and beneficial. In this project I used the popular Ames, Iowa housing data set to investigate which factors influence the final sale price. The research showed that location and condition of the house are the biggest attributes. A bigger house will not increase the final sale price as much as a smaller, nicer house in a better neighborhood.
+
+# Key Words
+
+house prices, regression, linear models, assessed value
+
+# Introduction
+
+This paper is the result of the final class group project in applying regression methods to real-world data. I chose housing data because I work as a Qaunt on Investment Real Estate portfolio  for a Commercial Bank. In addition, this research is based on a well-studied data set that allowed me to employ many topics discussed during the course. 
+
+The data set describes the sale of individual residential properties in Ames, Iowa from 2006 to 2010. Founded in 1864 as a station stop, Ames has a population of approximately 60,000 people, covers about 24.27 square miles and was ranked ninth on the *Best Places to Live*. The original data came directly from the Ames Assessor's Office recordkeeping database and included information for calculation of assessed value using the city's assessment process. The data is recent, and it covers the period of housing bubble collapse that led to the sub-prime mortgage crisis. The year 2008 saw one of the largest housing price drops in history.
+
+Each of over 2,900 total observations in the data represent attributes of an individual residential property sold. For properties that exchanged ownership multiple times during the collection period (2006 through 2010). There are about 80 variables included that cover a multitude of property attributes. Most variables describe the physical appearance or features of the property but other variables provide measures of quality and condition. The data types are varied and include discrete, continuous, and categorical (both nominal and ordinal) data.
+
+The data was originally published in the Journal of Statistics Education (Volume 19, Number 3). The data used for regression was downloaded from Kaggle.com, which allowed us the opportunity to compete against other kaggle users to find the best-fitting model for this data [@Kaggle].
+
+# Literature Review
+
+Building regression models to predict house prices is not a new undertaking.There is also a lot of data readily available with some cleanup work. Additionally, in large part thanks to the information revolution, data are easily accessible via many multiple listing services such as MLS.com.
+
+There are many attributes that factor into a house price. For example, environmental attributes can impact the price substantially. Gardens, pleasant views, and attractive landscaping can all increase the house value. Neighborhood attributes such as schools and public services also play a factor. 
+
+The data set deals mostly with physical characteristics of the house itself.One key characteristic that should be taken into account is the correlation between the prices of neighboring houses. This will not be addressed by my project because of complexity and since we do not have specific locations for our data set. 
+
+Another interesting approach to modeling house prices is hedonic regression. This method breaks up an item into its constituent parts and tries to predict the target value based on how much individual parts contribute to it. A house is a perfect heterogeneous good to be predicted by hedonic regression. It can be broken up into various characteristics such as number of bedrooms, distance to the city center, environmental features, etc.
+
+
+# Methodology
+
+### Data Description
+
+The data set includes 2,910 observation and 79 independent variables. Out of those 36 are numeric, such as lot area or pool area in square feet, and 43 are categorical, such as garage type (attached to home, built-in, carport, etc.) or utilities (gas, sewer, both, etc.). The data set is split into 1,460 observations comprising the training set and 1,459 observations representing the testing set.
+
+### Data Imputation
+
+Original data set included no complete observations (*see table 3*). However, according to the data dictionary, many of the`NA` values have a specific meaning. For example, `NA` in the `PoolQC` variable (pool quality) implies that the property has no pool. Often this logic carried across multiple variables - for example, `NA` in `GarageQual` (garage quality), `GarageCond` (garage condition) and `GarageType` variables all indicate that the property has no garage. This type of missing value was replaced with a new category - *No Pool*, *No Garage* or similar. This work was accomplished using the `forcats` `R` package.
+
+After this substitution the number of complete observations increased significantly to 2,861 or about 98% of all observations. There remained only 58 observations with true missing values. These observations contained 180 missing values in 32 variables. None of the variables contained a large number of missing values. The top one was `MasVnrType` with 24 observations containing `NA` (0.8% of all observations). None of the variables were close to the 5% missing threshold that would suggest that we should drop them from analysis.
+
+
+There are three ways to deal with missing values :
+
+- **Deleting the variables:** If the missingness is concentrated in a relatively small number of variables, then deleting the variables may be a good option. The downside to this approach is that we lose the opportunity to include the observed values in the model.
+- **Imputation via mean, median and mode:** An expedient way to retain all of the cases and variables is to insert the mean or median for continuous variables or the mode for categorical or discrete variables. This approach may suffice for a small number of values, but has the potential to introduce bias in the form of decreasing the variance.
+- **Prediction:** This more advanced approach involves using the other variables to predict the missing values. Without validating the results, this method also has the potential to introduce bias.
+
+For my data set I used multiple imputation by chained equations (MICE). The technique involves imputing multiple iterations of values in order to account for statistical uncertainty with standard errors. Since it uses chained equations, MICE has the ability to impute both numerical and categorical variables. The ideal scenario to use MICE is when less than 5% of the values are missing and when values are missing at random. I used the `mice` `R` package with the `cart` (classification and regression trees) method. `cart` is one of the five `mice` methods that can impute both numerical and categorical variables. Figure 3 shows the density plots of the observed and imputed values. The imputed distributions have more variance and extremes than the observed distributions.
+
+```{r NA Review}
+naVars <- read.csv(paste0("https://raw.githubusercontent.com/kaiserxc/DATA621FinalProject/",
+                          "master/report_files/table1_na_vars.csv"))
+naVars <- naVars[,2:4]
+colnames(naVars) <- c("Variable", "No of NAs", "Percent of Total Obs")
+pander(naVars, keep.trailing.zeros=TRUE, 
+       caption="Number of NA values in original data.",
+       justify=c("left", "right", "right"))
+```
