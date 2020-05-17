@@ -121,4 +121,113 @@ I tried to examine whether the modeling would benefit from transforming any of t
 
 I created several training data sets. The **first** of the three training data sets I created includes only the original variables with the missing values imputed. In model building and selection this set is referred to as the *original* data set. The **second** training data set includes seven "simplified" dummy variables instead of original variables. It also includes the five highly-correlated interactions. This set is referred to as the *transformed* data set. The **third** training data set includes the same predictor variables as in the second set with a transformed response variable. While creating all interactions, I noticed that the correlation values appeared to increase vis-a-vis the square root of the response variable. Consequently, since the response variable contains only positive values, I created a simple BIC step model and used it to calculate the Box-Cox $\lambda$ value and transform the response variable. According to Box-Cox, a $\lambda$ value of approximately 0.184 should help the final model meet the normality assumption. This set is referred as the *Box-Cox* data set.
 
+### Modeling
+
+Since I am dealing with trying to predict a continuous variable, house sale price, I relied upon building and optimizing general linear model.
+
+After fitting three baseline (all k-parameters) models to all three training data sets, ANOVA demonstrated statistical significance between the original data set and the transformed data set. While all multiple $R^2$ values were within some negligible deviation of each other, adding a Box-Cox transformation of the response variable improved the $R^2$ beyond the model based on the original data set. 
+
+I took the strongest model, and applied step-wise regression. I applied backward elimination in order to settle on a model with the lowest Akaike information criterion (AIC) value.
+
+
+I ended up with six representative models:
+
+1. **Model 1** is based on the fully transformed data set with Box-Cox transformed response variable. It includes all available predictor variables including any interactions created in data preparation. This model explains nearly 94% of variability of the response variable. A good starting point, however, I can remove some insignificant variables for a more parsimonious model with a decreased risk of overfitting.
+2. **Model 2** is based on Model 1 modified with step-wise regression (backward elimination). It is an improvement with lower number of parameters (156 comparing to 237). The multiple $R^2$ value is similar. Comparing two models using ANOVA indicates that they are not significantly different.
+3. **Model 3** selects only statistically highly significant variables from the previous model (p-value is nearly 0). $R^2$ drops and F-statistic rises, so even though the model is simpler with only 58 parameters, it may not be an improvement. Comparing this model with the first one using ANOVA, shows that there is significant difference between the two.
+4. **Model 4** expands on the previous model by using statistically significant variables, but with less strict criteria (p-value < 0.01). The number of parameters is increased, but $R^2$ is also increased. Similarly, per ANOVA, this model is significantly different from models 1 and 3.
+5. **Model 5** takes variables identified in the previous model, but it is trained on the original data set without interactions. It uses only log-transformation of `LotArea` predictor variable and `SalePrice` response variable. This model represents the best results based on $R^2$ for any model we have tried using the original data set.
+6. **Model 6** is based on Model 4, but it is trained on the transformed data set that includes interactions, but not the Box-Cox transformation of the response variable. Similarly to model 5, this model uses log-transformed `LotArea` and `SalePrice`. 
+
+For all models the F-statistic's p-value shows a drastic improvement over an intercept-only model, so we can infer that these models are statistically significant.
+
+The table below summarizes the models. We can see a steady improvement in AIC numbers for models 1 through 6. Adjusted $R^2$ fluctuates, but it remains high, and the values are close between various models. The fluctuation in $R^2$ is not enough to be the deciding factor in selecting a model.
+
+```{r Models Summary, echo=F, eval=T, results=T}
+models <- read.csv(paste0("https://raw.githubusercontent.com/omerozeren/DATA621/master/final_project/embedded_table1_models.csv"))
+colnames(models) <- c("Model", "Multiple R^2", "Adjusted R^2", "AIC", "Kaggle Score")
+pander(models, caption="",
+       digits=4, emphasize.rownames=FALSE, keep.trailing.zeros=TRUE, 
+       justify=c("left", "right", "right", "right", "right"))
+```
+
+
+Models 1 through 4 rely on the Box-Cox transformation of the response variable with $\lambda$ value of 0.184. Although this may slightly improve a model, it makes conversion of prediction difficult and confusing. Log-transformation of the response variable used by models 5 and 6 is significantly easier to implement. As such slight improvement of the Box-Cox model is not enough to justify added complexity of making predictions. It is important to consider how the model will be implemented and simplicity matters. 
+
+Model 6 is our primary linear regression model to predict house sale prices. 
+
+The model was tuned using k-fold validation (with 10 folds). It was run through full diagnostic and four leverage points have been identified. These observations were removed from the training set as it is very plausible that the sales data set has some uncharacteristic outliers.
+
+Additionally, two categorical variables - `Condition2` and `Utilities` - were removed from the model because they did not have enough samples in each category. These variables may be meaningful for predicting the response variable, but there is not enough information in our small data set for these variable to train on. 
+
+The final model had multiple $R^2$ of 0.9276, adjusted $R^2$ of 0.9225, AIC of -2172 . These are the best values in all categories.
+
+Figure 1 shows the model diagnostics. There is no discernible pattern among residuals. The Q-Q plot shows some problems with distribution tails; however, this is not unexpected with sales data - there are bound to be some really good and some really bad deals out there. Major leverage points have been accounted for. 
+
+Data preparation and transformation, including response variable transformation, model building and re-building as well as model diagnostics resulted in a linear regression model to predict house sale prices.
+
+![Model diagnostics.](https://raw.githubusercontent.com/omerozeren/DATA621/master/final_project/fig4_diag.png)
+
+# Experimentation and Results
+
+
+My model has 98 parameters. The majority of those are dummy variables created for categorical variables. Table 2 lists all parameters and corresponding coefficients. Please note that our response variable is log-transformed, so coefficients will only give a general idea of the impact on the sale price, and not a specific amount. 
+
+Linear regression takes the following form:
+
+\begin{center}
+$\hat{y} = \beta_0 + \beta_1 x_1 + ... + \beta_p x_p + \epsilon$
+\end{center}
+
+Here, $\hat{y}$ is the predicted outcome, $x_1$ through $x_p$ are selected parameters, $\beta_1$ through $\beta_p$ are corresponding coefficients, $\beta_0$ is the intercept and $\epsilon$ is the error or noise term. The formula used in `R` is as follows:
+
+```{r LM Formula, eval=F, echo=T}
+log(SalePrice) ~ OverallCond + Condition1 + MSZoning + X1stFlrSF + X2ndFlrSF + 
+  LowQualFinSF + Neighborhood + KitchenQual + Fireplaces + WoodDeckSF + 
+  Functional + FullBath + BsmtFullBath + BsmtFinType1 + BsmtExposure + BsmtQual +
+  LandSlope + LandContour + log(LotArea) + LotFrontage + LotConfig + HouseStyle + 
+  RoofStyle + MasVnrArea + ScreenPorch + House_Age_Yrs + RoofMatl_WdShngl +
+  GarageQual_abv_avg + OverallQual2_x_GrLivArea + OverallQual2_x_TotRmsAbvGrd_log + 
+  OverallQual2_x_GarageCars
+```
+
+```{r Coef Summary, echo=F, eval=T, results=T}
+coef <- read.csv(paste0("https://raw.githubusercontent.com/omerozeren/DATA621/master/final_project/embedded_table2_coef.csv"))
+pander(coef[,1:3], caption="Linear model parameters and coefficients (sorted by category and coefficient).",
+       emphasize.rownames=FALSE, keep.trailing.zeros=TRUE, 
+       justify=c("left", "left", "right"))
+```
+
+The attribute with the most negative effect on the sale price is severely damaged functionality of the house. Major deductions in functionality (a step above *Severely Damaged*) is also included in the top five negative attributes. Interestingly, typical functionality has one of the most positive influences on the sale price. Clearly and not surprisingly, general house condition that ranges from *Typical* to *Salvage Only*, is very important to the final sale price. 
+
+Another attribute that influences the sale price negatively is the Meadow Village neighborhood. Reviewing Ames, Iowa information, we can quickly notice that the Meadow Village despite its peaceful name is actually on the edge of town next to the airport. This would be a less desirable neighborhood in any town. On the opposite side of town, next to a golf club and to the Ada Hayden Heritage park and lake, is the Stone Brooke neighborhood. This is one of the most positive attributes. Again not surprisingly, the most positive and negative neighborhoods are on completely opposite sides of town. 
+
+Other major negative attributes are lack of finished basement and fair quality of kitchen. Zoning attributes make up other major positive attributes. 
+
+The model confirms a few attributes that can be considered common sense. For example, location adjacent to the railroad has a negative influence on the sale price. However, this only applies to the East-West railroad. The impact of the North-South railroad is positive. It is important to note that the East-West railroad cuts through the middle of the town while the North-South railroad only affects a small portion, and it is clearly a less used railroad. 
+
+Other notable factors are the following:
+
+- House age has a negative influence, but not as great as some other attributes. 
+- Being on a cul-de-sac is the most positive lot location. Inside lot has a slightly negative effect, and a lot with streets on 2 sides has even more negative coefficient. Finally, a lot with streets on 3 sides has the biggest negative impact. 
+- An unfinished basement generally has a negative impact as does a low-quality kitchen. 
+- The square footage of several characteristics, such as first or second floor, wood deck, porch, is not important (but the impact is slightly positive).
+- 1.5 and 2.5 story houses seem to be preferred; however, this variable is probably highly dependent on the type of houses available in Ames, and it could be representative of some other features.
+
+# Discussion and Conclusion
+
+Location and condition seem to be major attributes in house sale prices. There is seasonality to number of houses sold, especially considering that Ames is a college town; however, it does not appear to be a major factor. 
+
+The biggest limiting factor of our study is that it is based on one Midwest town's data. This model may not transfer well to other locations. After all it is not hard to imagine that the driving factors in Ames, Iowa are quite different from factors in New York, NY or Los Angeles, California. It is a helpful starting point, but may not be widely applicable. 
+
+Our research is based exclusively on linear regression. Other methods, such as Support Vector Machines or Random Forrest, may be able to achieve much better results. This data set provides a rich opportunity for research, and it would be beneficial to try other methods for comparison purposes.
+
+```{r Summary Stats Numeric}
+stat_tbl <- read.csv(paste0("https://raw.githubusercontent.com/omerozeren/DATA621/master/final_project/table2_stats.csv"))
+colnames(stat_tbl) <- c("Variable", "Count", "Mean", "SD", "Median", "Min", "Max", "Kurtosis")
+pander(stat_tbl, caption="Descriptive statistics for numerical variables.",
+       digits=4, emphasize.rownames=FALSE,
+       justify=c("left", "right", "right", "right", "right", "right", "right", "right"))
+```
+
 
