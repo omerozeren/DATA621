@@ -84,3 +84,41 @@ pander(naVars, keep.trailing.zeros=TRUE,
        caption="Number of NA values in original data.",
        justify=c("left", "right", "right"))
 ```
+
+### Additional Data Preparation
+
+All categorical variables were inspected and their order (or order of levels in R) was changed to match the most likely low-to-high order. These variables for the most part do not rely on the order of categories, so this step was not critical to modeling; however, it makes the modeling output more readable and easier to interpret.
+
+As is the case with most data sets, we found several values that were clearly typos and input errors. For instance, one observation had the year when garage was built listed as 2207. There were 6 negative values in age related variables (see data transformations below). Those were set to 0. 
+
+### Data Transformation
+
+Prior to modeling, I have extensively analyzed available variables and took a few approaches to variable transformations. They were meant to both simplify existing variables and add new variables that may be helpful in modeling. 
+
+Generally, it is more common to think about the age of the house than the year it was built. Each age related variable was stored in the data set in two related variables - year built and year sold.For house age the value was $YrSold - YearBuilt$. 
+
+Because I am not dealing with a time series data set, I have converted `YrSold` and `MoSold` variables from numeric to nominal. 
+
+Using the side-by-side box plots in Figure 4, I examined the categorical variables with more than two values to see if the variable can be simplified by combining the values into two groups. My criteria for this simplification was if the variables' inner quartile ranges of the response variable distinctly and logically bifurcate. For example, in `FireplaceQu` (fireplace quality), `HeatingQC` (heating quality) and `PoolQC` (pool quality), I noticed that the inner quartiles are bifurcated into two groups that do not overlap: the highest *Excellent* value and all other lesser quality conditions. Additional values that are distinct from other values in the same variables are the *Wood Shingle* value in the roof material variable (`RoofMat1`), the above average values in the garage quality variable (`GarageQual`), the gas-related values in the heating variable (`Heating`), and the *Partial* value in the sale condition variable (`SaleCondition`).
+
+```{r Correlations1}
+top_corr <- read.csv(paste0("https://raw.githubusercontent.com/omerozeren/DATA621/master/final_project/table3_top_corr.csv"))
+colnames(top_corr) <- c("Predictor Variable", "Response Variable", "Correlation", "R^2")
+pander(top_corr, keep.trailing.zeros=TRUE, 
+       caption="Predictor variables most correlated with original response variable.",
+       justify=c("left", "left", "right", "right"))
+```
+
+```{r Correlations2}
+tran_corr <- read.csv(paste0("https://raw.githubusercontent.com/omerozeren/DATA621/master/final_project/table4_top_transform.csv"))
+colnames(tran_corr) <- c("Response Variable", "Predictor Transformation", "Correlation", "R^2")
+pander(tran_corr, keep.trailing.zeros=TRUE, 
+       caption="Predictor transformations most correlated with transformed response variable.",
+       justify=c("left", "left", "right", "right"))
+```
+
+I tried to examine whether the modeling would benefit from transforming any of the predictor variables. I took natural logarithms, square roots and squares of the numerical variables, and then we calculated every possible pairwise interaction between these transformations, the original numerical variables and categorical variables. I then calculated all pairwise correlations between the interactions and the response variable `SalePrice`. The top correlations can be seen in table 6, which is sorted in descending order by R-squared. I clearly observed that there are several correlation values higher than the highest correlation between the original predictors and the response, which is `OverallQual` at 0.79 (*see table 5*). I added the top five interactions to our training data set.
+
+I created several training data sets. The **first** of the three training data sets I created includes only the original variables with the missing values imputed. In model building and selection this set is referred to as the *original* data set. The **second** training data set includes seven "simplified" dummy variables instead of original variables. It also includes the five highly-correlated interactions. This set is referred to as the *transformed* data set. The **third** training data set includes the same predictor variables as in the second set with a transformed response variable. While creating all interactions, I noticed that the correlation values appeared to increase vis-a-vis the square root of the response variable. Consequently, since the response variable contains only positive values, I created a simple BIC step model and used it to calculate the Box-Cox $\lambda$ value and transform the response variable. According to Box-Cox, a $\lambda$ value of approximately 0.184 should help the final model meet the normality assumption. This set is referred as the *Box-Cox* data set.
+
+
