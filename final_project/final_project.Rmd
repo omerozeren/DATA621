@@ -1,7 +1,7 @@
 ---
-title: "RealEstate House Pricing Analysis"
+title: "Real Estate House Pricing Analysis"
 author: |
-  | ** Omer Ozeren**
+  | **Omer Ozeren**
   | DATA 621, Master of Science in Data Science,
   | City University of New York
 output:
@@ -77,8 +77,7 @@ There are three ways to deal with missing values :
 For my data set I used multiple imputation by chained equations (MICE). The technique involves imputing multiple iterations of values in order to account for statistical uncertainty with standard errors. Since it uses chained equations, MICE has the ability to impute both numerical and categorical variables. The ideal scenario to use MICE is when less than 5% of the values are missing and when values are missing at random. I used the `mice` `R` package with the `cart` (classification and regression trees) method. `cart` is one of the five `mice` methods that can impute both numerical and categorical variables. Figure 3 shows the density plots of the observed and imputed values. The imputed distributions have more variance and extremes than the observed distributions.
 
 ```{r NA Review}
-naVars <- read.csv(paste0("https://raw.githubusercontent.com/kaiserxc/DATA621FinalProject/",
-                          "master/report_files/table1_na_vars.csv"))
+naVars <- read.csv(paste0("https://raw.githubusercontent.com/omerozeren/DATA621/master/final_project/table1_na_vars.csv"))
 naVars <- naVars[,2:4]
 colnames(naVars) <- c("Variable", "No of NAs", "Percent of Total Obs")
 pander(naVars, keep.trailing.zeros=TRUE, 
