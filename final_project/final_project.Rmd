@@ -36,13 +36,12 @@ house prices, regression, linear models, assessed value
 
 # Introduction
 
-This paper is the result of the final class group project in applying regression methods to real-world data. I chose housing data because I work as a Qaunt on Investment Real Estate portfolio  for a Commercial Bank. In addition, this research is based on a well-studied data set that allowed me to employ many topics discussed during the course. 
+This paper is the result of the final project in applying regression methods to real-world data. I chose housing data because I work as a Quant on Investment Real Estate portfolio  for a Commercial Bank. In addition, this research is based on a well-studied data set that allowed me to employ many topics discussed during the course. 
 
-The data set describes the sale of individual residential properties in Ames, Iowa from 2006 to 2010. Founded in 1864 as a station stop, Ames has a population of approximately 60,000 people, covers about 24.27 square miles and was ranked ninth on the *Best Places to Live*. The original data came directly from the Ames Assessor's Office recordkeeping database and included information for calculation of assessed value using the city's assessment process. The data is recent, and it covers the period of housing bubble collapse that led to the sub-prime mortgage crisis. The year 2008 saw one of the largest housing price drops in history.
-
+The data set describes the sale of individual residential properties in Ames, Iowa from 2006 to 2010. Founded in 1864 as a station stop, Ames has a population of approximately 60,000 people, covers about 24.27 square miles and was ranked ninth on the *Best Places to Live*. The original data came directly from the Ames Assessor's Office recordkeeping database and included information for calculation of assessed value using the city's assessment process. 
 Each of over 2,900 total observations in the data represent attributes of an individual residential property sold. For properties that exchanged ownership multiple times during the collection period (2006 through 2010). There are about 80 variables included that cover a multitude of property attributes. Most variables describe the physical appearance or features of the property but other variables provide measures of quality and condition. The data types are varied and include discrete, continuous, and categorical (both nominal and ordinal) data.
 
-The data was originally published in the Journal of Statistics Education (Volume 19, Number 3). The data used for regression was downloaded from Kaggle.com, which allowed us the opportunity to compete against other kaggle users to find the best-fitting model for this data [@Kaggle].
+The data was originally published in the Journal of Statistics Education. The data used for regression was downloaded from Kaggle.com, which allowed me the opportunity to compete against other kaggle users to find the best-fitting model for this data.
 
 # Literature Review
 
@@ -50,7 +49,7 @@ Building regression models to predict house prices is not a new undertaking.Ther
 
 There are many attributes that factor into a house price. For example, environmental attributes can impact the price substantially. Gardens, pleasant views, and attractive landscaping can all increase the house value. Neighborhood attributes such as schools and public services also play a factor. 
 
-The data set deals mostly with physical characteristics of the house itself.One key characteristic that should be taken into account is the correlation between the prices of neighboring houses. This will not be addressed by my project because of complexity and since we do not have specific locations for our data set. 
+The data set deals mostly with physical characteristics of the house itself.One key characteristic that should be taken into account is the correlation between the prices of neighboring houses. This will not be addressed by my project because of complexity and since I do not have specific locations for our data set. 
 
 Another interesting approach to modeling house prices is hedonic regression. This method breaks up an item into its constituent parts and tries to predict the target value based on how much individual parts contribute to it. A house is a perfect heterogeneous good to be predicted by hedonic regression. It can be broken up into various characteristics such as number of bedrooms, distance to the city center, environmental features, etc.
 
@@ -65,12 +64,12 @@ The data set includes 2,910 observation and 79 independent variables. Out of tho
 
 Original data set included no complete observations (*see table 3*). However, according to the data dictionary, many of the`NA` values have a specific meaning. For example, `NA` in the `PoolQC` variable (pool quality) implies that the property has no pool. Often this logic carried across multiple variables - for example, `NA` in `GarageQual` (garage quality), `GarageCond` (garage condition) and `GarageType` variables all indicate that the property has no garage. This type of missing value was replaced with a new category - *No Pool*, *No Garage* or similar. This work was accomplished using the `forcats` `R` package.
 
-After this substitution the number of complete observations increased significantly to 2,861 or about 98% of all observations. There remained only 58 observations with true missing values. These observations contained 180 missing values in 32 variables. None of the variables contained a large number of missing values. The top one was `MasVnrType` with 24 observations containing `NA` (0.8% of all observations). None of the variables were close to the 5% missing threshold that would suggest that we should drop them from analysis.
+After this substitution the number of complete observations increased significantly to 2,861 or about 98% of all observations. There remained only 58 observations with true missing values. These observations contained 180 missing values in 32 variables. None of the variables contained a large number of missing values. The top one was `MasVnrType` with 24 observations containing `NA` (0.8% of all observations). None of the variables were close to the 5% missing threshold that would suggest that I should drop them from analysis.
 
 
 There are three ways to deal with missing values :
 
-- **Deleting the variables:** If the missingness is concentrated in a relatively small number of variables, then deleting the variables may be a good option. The downside to this approach is that we lose the opportunity to include the observed values in the model.
+- **Deleting the variables:** If the missingness is concentrated in a relatively small number of variables, then deleting the variables may be a good option. The downside to this approach is that I lose the opportunity to include the observed values in the model.
 - **Imputation via mean, median and mode:** An expedient way to retain all of the cases and variables is to insert the mean or median for continuous variables or the mode for categorical or discrete variables. This approach may suffice for a small number of values, but has the potential to introduce bias in the form of decreasing the variance.
 - **Prediction:** This more advanced approach involves using the other variables to predict the missing values. Without validating the results, this method also has the potential to introduce bias.
 
@@ -89,7 +88,7 @@ pander(naVars, keep.trailing.zeros=TRUE,
 
 All categorical variables were inspected and their order (or order of levels in R) was changed to match the most likely low-to-high order. These variables for the most part do not rely on the order of categories, so this step was not critical to modeling; however, it makes the modeling output more readable and easier to interpret.
 
-As is the case with most data sets, we found several values that were clearly typos and input errors. For instance, one observation had the year when garage was built listed as 2207. There were 6 negative values in age related variables (see data transformations below). Those were set to 0. 
+As is the case with most data sets, I found several values that were clearly typos and input errors. For instance, one observation had the year when garage was built listed as 2207. There were 6 negative values in age related variables (see data transformations below). Those were set to 0. 
 
 ### Data Transformation
 
@@ -117,7 +116,7 @@ pander(tran_corr, keep.trailing.zeros=TRUE,
        justify=c("left", "left", "right", "right"))
 ```
 
-I tried to examine whether the modeling would benefit from transforming any of the predictor variables. I took natural logarithms, square roots and squares of the numerical variables, and then we calculated every possible pairwise interaction between these transformations, the original numerical variables and categorical variables. I then calculated all pairwise correlations between the interactions and the response variable `SalePrice`. The top correlations can be seen in table 6, which is sorted in descending order by R-squared. I clearly observed that there are several correlation values higher than the highest correlation between the original predictors and the response, which is `OverallQual` at 0.79 (*see table 5*). I added the top five interactions to our training data set.
+I tried to examine whether the modeling would benefit from transforming any of the predictor variables. I took natural logarithms, square roots and squares of the numerical variables, and then I calculated every possible pairwise interaction between these transformations, the original numerical variables and categorical variables. I then calculated all pairwise correlations between the interactions and the response variable `SalePrice`. The top correlations can be seen in table 6, which is sorted in descending order by R-squared. I clearly observed that there are several correlation values higher than the highest correlation between the original predictors and the response, which is `OverallQual` at 0.79 (*see table 5*). I added the top five interactions to our training data set.
 
 I created several training data sets. The **first** of the three training data sets I created includes only the original variables with the missing values imputed. In model building and selection this set is referred to as the *original* data set. The **second** training data set includes seven "simplified" dummy variables instead of original variables. It also includes the five highly-correlated interactions. This set is referred to as the *transformed* data set. The **third** training data set includes the same predictor variables as in the second set with a transformed response variable. While creating all interactions, I noticed that the correlation values appeared to increase vis-a-vis the square root of the response variable. Consequently, since the response variable contains only positive values, I created a simple BIC step model and used it to calculate the Box-Cox $\lambda$ value and transform the response variable. According to Box-Cox, a $\lambda$ value of approximately 0.184 should help the final model meet the normality assumption. This set is referred as the *Box-Cox* data set.
 
@@ -136,12 +135,12 @@ I ended up with six representative models:
 2. **Model 2** is based on Model 1 modified with step-wise regression (backward elimination). It is an improvement with lower number of parameters (156 comparing to 237). The multiple $R^2$ value is similar. Comparing two models using ANOVA indicates that they are not significantly different.
 3. **Model 3** selects only statistically highly significant variables from the previous model (p-value is nearly 0). $R^2$ drops and F-statistic rises, so even though the model is simpler with only 58 parameters, it may not be an improvement. Comparing this model with the first one using ANOVA, shows that there is significant difference between the two.
 4. **Model 4** expands on the previous model by using statistically significant variables, but with less strict criteria (p-value < 0.01). The number of parameters is increased, but $R^2$ is also increased. Similarly, per ANOVA, this model is significantly different from models 1 and 3.
-5. **Model 5** takes variables identified in the previous model, but it is trained on the original data set without interactions. It uses only log-transformation of `LotArea` predictor variable and `SalePrice` response variable. This model represents the best results based on $R^2$ for any model we have tried using the original data set.
+5. **Model 5** takes variables identified in the previous model, but it is trained on the original data set without interactions. It uses only log-transformation of `LotArea` predictor variable and `SalePrice` response variable. This model represents the best results based on $R^2$ for any model I have tried using the original data set.
 6. **Model 6** is based on Model 4, but it is trained on the transformed data set that includes interactions, but not the Box-Cox transformation of the response variable. Similarly to model 5, this model uses log-transformed `LotArea` and `SalePrice`. 
 
-For all models the F-statistic's p-value shows a drastic improvement over an intercept-only model, so we can infer that these models are statistically significant.
+For all models the F-statistic's p-value shows a drastic improvement over an intercept-only model, so I can infer that these models are statistically significant.
 
-The table below summarizes the models. We can see a steady improvement in AIC numbers for models 1 through 6. Adjusted $R^2$ fluctuates, but it remains high, and the values are close between various models. The fluctuation in $R^2$ is not enough to be the deciding factor in selecting a model.
+The table below summarizes the models. I can see a steady improvement in AIC numbers for models 1 through 6. Adjusted $R^2$ fluctuates, but it remains high, and the values are close between various models. The fluctuation in $R^2$ is not enough to be the deciding factor in selecting a model.
 
 ```{r Models Summary, echo=F, eval=T, results=T}
 models <- read.csv(paste0("https://raw.githubusercontent.com/omerozeren/DATA621/master/final_project/embedded_table1_models.csv"))
@@ -200,7 +199,7 @@ pander(coef[,1:3], caption="Linear model parameters and coefficients (sorted by 
 
 The attribute with the most negative effect on the sale price is severely damaged functionality of the house. Major deductions in functionality (a step above *Severely Damaged*) is also included in the top five negative attributes. Interestingly, typical functionality has one of the most positive influences on the sale price. Clearly and not surprisingly, general house condition that ranges from *Typical* to *Salvage Only*, is very important to the final sale price. 
 
-Another attribute that influences the sale price negatively is the Meadow Village neighborhood. Reviewing Ames, Iowa information, we can quickly notice that the Meadow Village despite its peaceful name is actually on the edge of town next to the airport. This would be a less desirable neighborhood in any town. On the opposite side of town, next to a golf club and to the Ada Hayden Heritage park and lake, is the Stone Brooke neighborhood. This is one of the most positive attributes. Again not surprisingly, the most positive and negative neighborhoods are on completely opposite sides of town. 
+Another attribute that influences the sale price negatively is the Meadow Village neighborhood. Reviewing Ames, Iowa information, I can quickly notice that the Meadow Village despite its peaceful name is actually on the edge of town next to the airport. This would be a less desirable neighborhood in any town. On the opposite side of town, next to a golf club and to the Ada Hayden Heritage park and lake, is the Stone Brooke neighborhood. This is one of the most positive attributes. Again not surprisingly, the most positive and negative neighborhoods are on completely opposite sides of town. 
 
 Other major negative attributes are lack of finished basement and fair quality of kitchen. Zoning attributes make up other major positive attributes. 
 
