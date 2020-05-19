@@ -5,12 +5,14 @@ author: |
   | DATA 621, Master of Science in Data Science,
   | City University of New York
 output:
-  html_document:
-    df_print: paged
+  word_document:
     toc: no
   pdf_document:
     df_print: kable
     fig_caption: yes
+    toc: no
+  html_document:
+    df_print: paged
     toc: no
 ---
 ```{r options_pkgs, echo=F, warning=F, message=F, results=F}
