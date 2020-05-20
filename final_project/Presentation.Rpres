@@ -1,7 +1,7 @@
 DATA 621 Final Presentation 
 ========================================================
-author: Kyle Gilde, Jaan Bernberg, Kai Lukowiak, Michael Muller, Ilya Kats
-date: 2018-05-24
+author: Omer OZeren
+date: 2020-05-15
 autosize: true
 
 
@@ -57,7 +57,6 @@ Literature Review
 
 * Simply assessing the attributes of a house by number and conditional qualities of rooms is not not sufficient. (i.e. Two beautiful half-bathrooms does not equate to two beautiful bathroom suites.(Pardoe, 2008)) The caveat to including whether or not the bathroom is a half-bathroom or not; creates tedious datasets, confounding variables, and issue of where to draw the line of specificity.  
 
-* We can expect to see a high coefficient on the neighborhood variable. However this is an over generalized attribute stemming from a variable we do not have, 'neighboring houses.'(Dubin, 1998)  
 
 * A proposed approach to modeling housing sale prices, would be a hedonic regression. Simply put, analyze the factors of a house, group attributes to those factors, and make several different regressions, leading to one output.(Downes, 2002)
 
@@ -88,7 +87,7 @@ The density plots for the various imputed values can be see here.
 Transformations
 ===
 
-We created a new variable, age, which was the age at which the house was sold. Any negative values were set to zero.
+I created a new variable, age, which was the age at which the house was sold. Any negative values were set to zero.
 
 Ordered categorical variables such as `HeatingQC` that did not have overlapping interquartile ranges were changed to a single dummy variable. For example, if `HeatingQC == Excellent` and `HeatingQC != Excellent` did not have overlapping IQRs, they would be transformed into a dummy variable. This increases on degrees of freedom.
 
@@ -113,8 +112,7 @@ There were six models used:
 ```{r echo=FALSE}
 library(knitr)
 library(kableExtra)
-models <- read.csv(paste0("https://raw.githubusercontent.com/kaiserxc/DATA621FinalProject/",
-                          "master/report_files/embedded_table1_models.csv"))
+models <- read.csv(paste0("https://raw.githubusercontent.com/omerozeren/DATA621/master/final_project/embedded_table1_models.csv"))
 colnames(models) <- c("Model", "Multiple R^2", "Adjusted R^2", "AIC", "Kaggle Score")
 models$Description <- c('All variables, Box-Cox and other transformations', 
                        'Model 1 with backwards stepwise regression, not statistically different',
@@ -134,11 +132,11 @@ During model evaluation, Models 5 & 6 was chosen as most valid. Model tuning was
 Afterwards, adjusted model 6 had the best performance both on the training data, as well as the best kaggle score. As such, we are not worried about over fitting. It had multiple R2 of 0.9276, adjusted R2 of 0.9225, AIC of -2172 and Kaggle score of 0.13376. These are the best values in all categories.
 
 ***
-![Model diagnostics.](https://raw.githubusercontent.com/kaiserxc/DATA621FinalProject/master/report_files/fig4_diag.png)
+![Model diagnostics.](https://raw.githubusercontent.com/omerozeren/DATA621/master/final_project/fig4_diag.png)
 
 Conclusion
 === 
-  Examining the model coefficients, we are reminded of the classic real estate adage, 'Location, Location, Location.' Variables with the most powerful coefficients included features that are only obtainable in certain areas. Such as pools, garages, neighborhood, and the contour of land. Where as the lowest coefficients included shapes, styles, and building materials. 
+  Examining the model coefficients, I am reminded of the classic real estate adage, 'Location, Location, Location.' Variables with the most powerful coefficients included features that are only obtainable in certain areas. Such as pools, garages, neighborhood, and the contour of land. Where as the lowest coefficients included shapes, styles, and building materials. 
 
   Other factors such as condition also played a role. Further, it is unlikely that this model will transfer to other geographic areas and should only be used to estimate houses in the mid west. In particular, university towns such as this one where off-campus housing may dictate a large portion of sale price. 
 
