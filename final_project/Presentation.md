@@ -1,7 +1,7 @@
 DATA 621 Final Presentation 
 ========================================================
 author: Omer Ozeren
-date: 2020-05-15
+date: 05/15/2020
 autosize: true
 
 
@@ -41,7 +41,7 @@ Literature Review
 * A proposed approach to modeling housing sale prices, would be a hedonic regression. Simply put, analyze the factors of a house, group attributes to those factors, and make several different regressions, leading to one output.(Downes, 2002)
 
 Methodology 1
-===
+=============
 
 The data is split almost equally into training and test data. 
 
@@ -54,7 +54,7 @@ After the features were fixed, 2% of missing values remained.
 ![Missing Values](https://raw.githubusercontent.com/omerozeren/DATA621/master/final_project/fig1_na_dist.png)
 
 Methodology 2
-===
+=============
 
 Values for both categorical and continuous variables were imputed using `mice` and the random Forrest imputation method.
 
@@ -65,7 +65,7 @@ The density plots for the various imputed values can be see here.
 
 
 Transformations
-===
+===============
 
 I created a new variable, age, which was the age at which the house was sold. Any negative values were set to zero.
 
@@ -74,7 +74,7 @@ Ordered categorical variables such as `HeatingQC` that did not have overlapping 
 Interaction terms were created via a grid search and selected based on their individual $R^2$ values.
 
 Transformations 2
-===
+=================
 
 Finally a Box-Cox transformation was performed. The optimal $\lambda$ was found to be 0.184. This means that the response variable `SalePrice` was raised to the 0.184 power.
 
@@ -86,7 +86,7 @@ Visible in the scatter plots, many of the relationships become more linear.
 ![Difference in scatter plots between transformed and raw data](https://github.com/omerozeren/DATA621/tree/master/final_project/Scatter_Trans_and_Imp.png?raw=true)
 
 Modeling
-===
+========
 There were six models used: 
 
 <table class="table" style="font-size: 12px; margin-left: auto; margin-right: auto;">
