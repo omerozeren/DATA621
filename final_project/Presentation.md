@@ -1,13 +1,13 @@
 DATA 621 Final Presentation 
 ========================================================
-author: Omer OZeren
+author: Omer Ozeren
 date: 2020-05-15
 autosize: true
 
 
 
 
-Abstract
+Introduction - PART I
 ========================================================
 
 ![plot of chunk unnamed-chunk-1](Presentation-figure/unnamed-chunk-1-1.png)
@@ -21,9 +21,9 @@ Abstract
   * Condition
   
 
-Introduction
+Introduction - PART II
 ========================================================
-![House in Aimes](https://github.com/omerozeren/DATA621/tree/master/final_project/AimesHouse.jpeg?raw=true)
+![House in Aimes](https://raw.githubusercontent.com/omerozeren/DATA621/master/final_project/AimesHouse.jpeg)
 ***
 The data was originally published in the Journal of Statistics Education (Volume 19, Number 3) as a juxtaposition to the Boston housing dataset. It is now part of a long running Kaggle competition.
 
