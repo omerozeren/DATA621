@@ -164,7 +164,7 @@ Afterwards, adjusted model 6 had the best performance both on the training data,
 
 Conclusion
 === 
-  Examining the model coefficients, I am reminded of the classic real estate adage, 'Location, Location, Location.' Variables with the most powerful coefficients included features that are only obtainable in certain areas. Such as pools, garages, neighborhood, and the contour of land. Where as the lowest coefficients included shapes, styles, and building materials. 
+  Examining the model coefficients, Variables with the most powerful coefficients included features that are only obtainable in certain areas. Such as pools, garages, neighborhood, and the contour of land. Where as the lowest coefficients included shapes, styles, and building materials. 
 
   Other factors such as condition also played a role. Further, it is unlikely that this model will transfer to other geographic areas and should only be used to estimate houses in the mid west. In particular, university towns such as this one where off-campus housing may dictate a large portion of sale price. 
 
