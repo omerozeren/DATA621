@@ -83,7 +83,7 @@ $${Y}(\lambda)  = \begin{cases} \frac { { y }^{ \lambda  } - 1 }{ \lambda }, & \
 Visible in the scatter plots, many of the relationships become more linear. 
 
 ***
-![Difference in scatter plots between transformed and raw data](https://github.com/omerozeren/DATA621/tree/master/final_project/Scatter_Trans_and_Imp.png?raw=true)
+![Difference in scatter plots between transformed and raw data](https://raw.githubusercontent.com/omerozeren/DATA621/master/final_project/Scatter_Trans_and_Imp.png)
 
 Modeling
 ========
