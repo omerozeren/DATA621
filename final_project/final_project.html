@@ -1991,35 +1991,35 @@ ord_vars &lt;- c(&quot;LotShape&quot;,&quot;Utilities&quot;, &quot;LandSlope&quo
               &quot;GarageQual&quot;, &quot;GarageCond&quot;, &quot;PavedDrive&quot;, &quot;PoolQC&quot;, &quot;Fence&quot;)
 # Order of levels for ordinal variables 
 # all are ordered most favorible to least favorible, below
-LotShape_ &lt;- c(&quot;Reg&quot;, &quot;IR1&quot;, &quot;IR2&quot;, &quot;IR3&quot;)        # needs repair
-Utilities_ &lt;- c(&quot;AllPub&quot;, &quot;NoSeWa&quot;)               # ok - No &quot;NoSewr&quot;, &quot;ELO&quot;
-LandSlope_ &lt;- c(&quot;Gtl&quot;,&quot;Mod&quot;, &quot;Sev&quot;)               # ok
-ExterQual_ &lt;- c(&quot;Ex&quot;, &quot;Gd&quot;, &quot;TA&quot;, &quot;Fa&quot;)           # needs repair - No &quot;Po&quot;
-ExterCond_ &lt;- c(&quot;Ex&quot;, &quot;Gd&quot;, &quot;TA&quot;, &quot;Fa&quot;, &quot;Po&quot;)     # needs repair
-BsmtQual_ &lt;- c(&quot;Ex&quot;, &quot;Gd&quot;, &quot;TA&quot;, &quot;Fa&quot;, &quot;NoB&quot;)     # needs repair
-BsmtCond_ &lt;- c(&quot;Gd&quot;, &quot;TA&quot;, &quot;Fa&quot;, &quot;NoB&quot;)           # needs repair
-BsmtExposure_ &lt;- c(&quot;Gd&quot;, &quot;Av&quot;, &quot;Mn&quot;, &quot;No&quot;, &quot;NoB&quot;) # needs repair
+LotShape_ &lt;- c(&quot;Reg&quot;, &quot;IR1&quot;, &quot;IR2&quot;, &quot;IR3&quot;)       
+Utilities_ &lt;- c(&quot;AllPub&quot;, &quot;NoSeWa&quot;)              
+LandSlope_ &lt;- c(&quot;Gtl&quot;,&quot;Mod&quot;, &quot;Sev&quot;)             
+ExterQual_ &lt;- c(&quot;Ex&quot;, &quot;Gd&quot;, &quot;TA&quot;, &quot;Fa&quot;)           
+ExterCond_ &lt;- c(&quot;Ex&quot;, &quot;Gd&quot;, &quot;TA&quot;, &quot;Fa&quot;, &quot;Po&quot;)     
+BsmtQual_ &lt;- c(&quot;Ex&quot;, &quot;Gd&quot;, &quot;TA&quot;, &quot;Fa&quot;, &quot;NoB&quot;)     
+BsmtCond_ &lt;- c(&quot;Gd&quot;, &quot;TA&quot;, &quot;Fa&quot;, &quot;NoB&quot;)           
+BsmtExposure_ &lt;- c(&quot;Gd&quot;, &quot;Av&quot;, &quot;Mn&quot;, &quot;No&quot;, &quot;NoB&quot;) 
 BsmtFinType1_ &lt;- c(&quot;GLQ&quot;, &quot;ALQ&quot;, &quot;BLQ&quot;, 
-                   &quot;Rec&quot;, &quot;LwQ&quot;, &quot;Unf&quot;, &quot;NoB&quot;)    # needs repair
+                   &quot;Rec&quot;, &quot;LwQ&quot;, &quot;Unf&quot;, &quot;NoB&quot;)    
 BsmtFinType2_ &lt;- c(&quot;GLQ&quot;, &quot;ALQ&quot;, &quot;BLQ&quot;, 
-                   &quot;Rec&quot;, &quot;LwQ&quot;, &quot;Unf&quot;, &quot;NoB&quot;)    # needs repair
-HeatingQC_ &lt;- c(&quot;Ex&quot;, &quot;Gd&quot;, &quot;TA&quot;, &quot;Fa&quot;, &quot;Po&quot;)     # needs repair 
+                   &quot;Rec&quot;, &quot;LwQ&quot;, &quot;Unf&quot;, &quot;NoB&quot;)    
+HeatingQC_ &lt;- c(&quot;Ex&quot;, &quot;Gd&quot;, &quot;TA&quot;, &quot;Fa&quot;, &quot;Po&quot;)    
 Electrical_ &lt;- c(&quot;SBrkr&quot;, &quot;FuseA&quot;, &quot;FuseF&quot;,
-                 &quot;FuseP&quot;, &quot;Mix&quot;)                  # needs repair
-KitchenQual_ &lt;- c(&quot;Ex&quot;, &quot;Gd&quot;, &quot;TA&quot;, &quot;Fa&quot;)         # needs repair - no &quot;Po&quot;
+                 &quot;FuseP&quot;, &quot;Mix&quot;)                  
+KitchenQual_ &lt;- c(&quot;Ex&quot;, &quot;Gd&quot;, &quot;TA&quot;, &quot;Fa&quot;)        
 Functional_ &lt;- c(&quot;Typ&quot;, &quot;Min1&quot;, &quot;Min2&quot;, &quot;Mod&quot;,
-                 &quot;Maj1&quot;, &quot;Maj2&quot;, &quot;Sev&quot;)           # needs repair - no &quot;Sal&quot;
+                 &quot;Maj1&quot;, &quot;Maj2&quot;, &quot;Sev&quot;)           
 FireplaceQu_ &lt;- c(&quot;Ex&quot;, &quot;Gd&quot;, &quot;TA&quot;, &quot;Fa&quot;, 
-                  &quot;Po&quot;, &quot;NoFp&quot;)                   # needs repair
-GarageFinish_ &lt;- c(&quot;Fin&quot;, &quot;RFn&quot;, &quot;Unf&quot;, &quot;NoG&quot;)    # ok
+                  &quot;Po&quot;, &quot;NoFp&quot;)                   
+GarageFinish_ &lt;- c(&quot;Fin&quot;, &quot;RFn&quot;, &quot;Unf&quot;, &quot;NoG&quot;)    
 GarageQual_ &lt;- c(&quot;Ex&quot;, &quot;Gd&quot;, &quot;TA&quot;, &quot;Fa&quot;, &quot;Po&quot;, 
-                 &quot;NoG&quot;)                           # needs repair
+                 &quot;NoG&quot;)                          
 GarageCond_ &lt;- c(&quot;Ex&quot;, &quot;Gd&quot;, &quot;TA&quot;, &quot;Fa&quot;, &quot;Po&quot;, 
-                 &quot;NoG&quot;)                           # needs repair
-PavedDrive_ &lt;- c(&quot;Y&quot;, &quot;P&quot;, &quot;N&quot;)                   # needs repair
-PoolQC_ &lt;- c(&quot;Ex&quot;, &quot;Gd&quot;, &quot;Fa&quot;, &quot;NoP&quot;)             # needs repair - no &quot;TA&quot;
+                 &quot;NoG&quot;)                           
+PavedDrive_ &lt;- c(&quot;Y&quot;, &quot;P&quot;, &quot;N&quot;)                   
+PoolQC_ &lt;- c(&quot;Ex&quot;, &quot;Gd&quot;, &quot;Fa&quot;, &quot;NoP&quot;)             
 Fence_ &lt;- c(&quot;GdPrv&quot;, &quot;MnPrv&quot;, &quot;GdWo&quot;, &quot;MnWw&quot;,
-            &quot;NoF&quot;)                                # needs repair
+            &quot;NoF&quot;)                                
 # list of lists of the correct factor levels
 n_levels &lt;- list(LotShape_, Utilities_,  LandSlope_,  ExterQual_,  
                  ExterCond_,  BsmtQual_,  BsmtCond_,  BsmtExposure_, 
